@@ -11,6 +11,8 @@ public class Robot {
         this.batteryLevel = batteryLevel;
     }
 
+
+
     public String getName() {
         return name;
     }
@@ -23,8 +25,16 @@ public class Robot {
         return batteryLevel;
     }
 
-    public void setName() {
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setBatteryLevel(int batteryLevel) {
+        this.batteryLevel = batteryLevel;
     }
 }
 // FAZER GETTERS AND SETTERS PARA TODOS

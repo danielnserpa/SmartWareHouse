@@ -30,7 +30,7 @@ public final class StorageServiceProto {
     java.lang.String[] descriptorData = {
       "\n\024StorageService.proto\022\021com.ncirl.storag" +
       "e\032\033google/protobuf/empty.proto\"F\n\032UnaryS" +
-      "torageStatusResponse\022\021\n\tstorageId\030\001 \001(\t\022" +
+      "torageStatusResponse\022\021\n\tstorageId\030\001 \001(\005\022" +
       "\025\n\rstorageStatus\030\002 \001(\t2r\n\016StorageService" +
       "\022`\n\027getCurrentStorageStatus\022\026.google.pro" +
       "tobuf.Empty\032-.com.ncirl.storage.UnarySto" +

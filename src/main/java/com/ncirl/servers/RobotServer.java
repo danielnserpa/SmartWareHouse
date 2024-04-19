@@ -9,13 +9,13 @@ import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
-import java.util.Random;
+
 import java.util.concurrent.TimeUnit;
 
 public class RobotServer {
 
     private Server server;
-    int port = 50055;
+    int port = 50054;
 
     public void start() throws IOException {
 
@@ -59,12 +59,12 @@ public class RobotServer {
          Robot robot;
 
          public RobotServiceImpl() {
-             robot = new Robot("R2D3", "Idle", 20);
+             robot = new Robot("TOBOR", "Idle", 100);
          }
 
          @Override
          public void getCurrentRobotStatus (Empty request, StreamObserver<UnaryRobotStatusResponse> responseObserver) {
-System.out.println("Server side getRobotStatus method invoked...");
+             System.out.println("Server side getRobotStatus method invoked...");
              UnaryRobotStatusResponse response = UnaryRobotStatusResponse.newBuilder()
                      .setRobotName(robot.getName())
                      .setRobotStatus(robot.getStatus())

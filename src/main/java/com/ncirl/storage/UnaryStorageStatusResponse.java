@@ -16,7 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private UnaryStorageStatusResponse() {
-    storageId_ = "";
+    storageId_ = 0;
     storageStatus_ = "";
   }
 
@@ -44,10 +44,9 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 8: {
 
-            storageId_ = s;
+            storageId_ = input.readInt32();
             break;
           }
           case 18: {
@@ -89,45 +88,16 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int STORAGEID_FIELD_NUMBER = 1;
-  private volatile java.lang.Object storageId_;
+  private int storageId_;
   /**
    * <pre>
    * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
    * </pre>
    *
-   * <code>string storageId = 1;</code>
+   * <code>int32 storageId = 1;</code>
    */
-  public java.lang.String getStorageId() {
-    java.lang.Object ref = storageId_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      storageId_ = s;
-      return s;
-    }
-  }
-  /**
-   * <pre>
-   * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
-   * </pre>
-   *
-   * <code>string storageId = 1;</code>
-   */
-  public com.google.protobuf.ByteString
-      getStorageIdBytes() {
-    java.lang.Object ref = storageId_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      storageId_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public int getStorageId() {
+    return storageId_;
   }
 
   public static final int STORAGESTATUS_FIELD_NUMBER = 2;
@@ -178,8 +148,8 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getStorageIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, storageId_);
+    if (storageId_ != 0) {
+      output.writeInt32(1, storageId_);
     }
     if (!getStorageStatusBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, storageStatus_);
@@ -193,8 +163,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getStorageIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, storageId_);
+    if (storageId_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(1, storageId_);
     }
     if (!getStorageStatusBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, storageStatus_);
@@ -215,8 +186,8 @@ private static final long serialVersionUID = 0L;
     com.ncirl.storage.UnaryStorageStatusResponse other = (com.ncirl.storage.UnaryStorageStatusResponse) obj;
 
     boolean result = true;
-    result = result && getStorageId()
-        .equals(other.getStorageId());
+    result = result && (getStorageId()
+        == other.getStorageId());
     result = result && getStorageStatus()
         .equals(other.getStorageStatus());
     result = result && unknownFields.equals(other.unknownFields);
@@ -231,7 +202,7 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + STORAGEID_FIELD_NUMBER;
-    hash = (53 * hash) + getStorageId().hashCode();
+    hash = (53 * hash) + getStorageId();
     hash = (37 * hash) + STORAGESTATUS_FIELD_NUMBER;
     hash = (53 * hash) + getStorageStatus().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
@@ -367,7 +338,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      storageId_ = "";
+      storageId_ = 0;
 
       storageStatus_ = "";
 
@@ -447,9 +418,8 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(com.ncirl.storage.UnaryStorageStatusResponse other) {
       if (other == com.ncirl.storage.UnaryStorageStatusResponse.getDefaultInstance()) return this;
-      if (!other.getStorageId().isEmpty()) {
-        storageId_ = other.storageId_;
-        onChanged();
+      if (other.getStorageId() != 0) {
+        setStorageId(other.getStorageId());
       }
       if (!other.getStorageStatus().isEmpty()) {
         storageStatus_ = other.storageStatus_;
@@ -484,59 +454,26 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object storageId_ = "";
+    private int storageId_ ;
     /**
      * <pre>
      * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
      * </pre>
      *
-     * <code>string storageId = 1;</code>
+     * <code>int32 storageId = 1;</code>
      */
-    public java.lang.String getStorageId() {
-      java.lang.Object ref = storageId_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        storageId_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
+    public int getStorageId() {
+      return storageId_;
     }
     /**
      * <pre>
      * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
      * </pre>
      *
-     * <code>string storageId = 1;</code>
+     * <code>int32 storageId = 1;</code>
      */
-    public com.google.protobuf.ByteString
-        getStorageIdBytes() {
-      java.lang.Object ref = storageId_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        storageId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <pre>
-     * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
-     * </pre>
-     *
-     * <code>string storageId = 1;</code>
-     */
-    public Builder setStorageId(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
+    public Builder setStorageId(int value) {
+      
       storageId_ = value;
       onChanged();
       return this;
@@ -546,29 +483,11 @@ private static final long serialVersionUID = 0L;
      * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
      * </pre>
      *
-     * <code>string storageId = 1;</code>
+     * <code>int32 storageId = 1;</code>
      */
     public Builder clearStorageId() {
       
-      storageId_ = getDefaultInstance().getStorageId();
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
-     * </pre>
-     *
-     * <code>string storageId = 1;</code>
-     */
-    public Builder setStorageIdBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      storageId_ = value;
+      storageId_ = 0;
       onChanged();
       return this;
     }

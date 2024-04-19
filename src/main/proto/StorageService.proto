@@ -17,6 +17,6 @@ service StorageService {
 message UnaryStorageStatusResponse {
 
   // Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
-  string storageId = 1;
+  int32 storageId = 1;
   string storageStatus = 2;
 }

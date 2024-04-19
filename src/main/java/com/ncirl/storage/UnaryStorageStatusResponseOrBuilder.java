@@ -12,18 +12,9 @@ public interface UnaryStorageStatusResponseOrBuilder extends
    * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
    * </pre>
    *
-   * <code>string storageId = 1;</code>
+   * <code>int32 storageId = 1;</code>
    */
-  java.lang.String getStorageId();
-  /**
-   * <pre>
-   * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
-   * </pre>
-   *
-   * <code>string storageId = 1;</code>
-   */
-  com.google.protobuf.ByteString
-      getStorageIdBytes();
+  int getStorageId();
 
   /**
    * <code>string storageStatus = 2;</code>

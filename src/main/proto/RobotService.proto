@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package com.ncirl.robot; // I need to specify the package
+
+option java_multiple_files = true;
+option java_package = "com.ncirl.robot";
+option java_outer_classname = "RobotServiceProto";
+
+service RobotService {
+
+  rpc getCurrentRobotStatus (google.protobuf.Empty) returns (UnaryRobotStatusResponse);
+
+  rpc StreamCurrentRobotStatus (google.protobuf.Empty) returns (stream UnaryRobotStatusResponse);
+
+}
+
+
+// Nao preciso disso, pois a mensagem vai em branco
+
+//message UnaryRobotStatusRequest {
+//
+//  // Mensagem adicional extra para enviar ao servidor. Exemplo: "Me mande os dados do robo"
+//  string robotRequestMessage = 1;
+//
+//}
+
+message UnaryRobotStatusResponse {
+
+  // Dados que serao passados para o cliente, apos o request. Sao as informacoes do robot.
+  string robotName = 1;
+  string robotStatus = 2;
+  int32 robotBatteryLevel = 3;
+}
+

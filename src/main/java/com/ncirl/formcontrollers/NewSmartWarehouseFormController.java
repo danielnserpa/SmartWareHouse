@@ -9,13 +9,13 @@ import com.ncirl.thermostat.ThermostatServiceGrpc;
 import com.ncirl.thermostat.UnaryThermostatStatusResponse;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 public class NewSmartWarehouseFormController {
 
-
     public Label robotStatusOutputLabel;
-    private RobotServiceGrpc.RobotServiceBlockingStub robotServiceBlockingStub; // IM USING THIS AS  THE CLIENT
+    private RobotServiceGrpc.RobotServiceBlockingStub robotServiceBlockingStub;
     private ManagedChannel robotServiceManagedChannel;
 
     public Label storageStatusOutputLabel;
@@ -27,44 +27,43 @@ public class NewSmartWarehouseFormController {
     private ManagedChannel thermostatServiceManagedChannel;
 
     public void initialize() {
-        System.out.println("Robot form is initialising...");
+        System.out.println("Robot form is initializing...");
         robotServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50054)
                 .usePlaintext()
                 .build();
         robotServiceBlockingStub = RobotServiceGrpc.newBlockingStub(robotServiceManagedChannel);
         System.out.println("Robot gRPC Channel created...");
 
-
-        // Update the Robot status
-        updateRobotStatus();
-
-        System.out.println("Storage form is initialising...");
+        System.out.println("Storage form is initializing...");
         storageServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50059)
                 .usePlaintext()
                 .build();
         storageServiceBlockingStub = StorageServiceGrpc.newBlockingStub(storageServiceManagedChannel);
         System.out.println("Storage gRPC Channel created...");
 
-
-        // Update the Storage status
-        updateStorageStatus();
-
-        System.out.println("Thermostat form is initialising...");
+        System.out.println("Thermostat form is initializing...");
         thermostatServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50060)
                 .usePlaintext()
                 .build();
         thermostatServiceBlockingStub = ThermostatServiceGrpc.newBlockingStub(thermostatServiceManagedChannel);
         System.out.println("Thermostat gRPC Channel created...");
-
-
-        // Update the Thermostat status
-        updateThermostatStatus();
     }
 
-    private void updateRobotStatus () {
-        System.out.println("Updating Robot status...");
+    @FXML
+    private void showAllTemperatures() {
+        // This is making the gRPC calls for all temperatures
+        UnaryThermostatStatusResponse response1 = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());
+        UnaryThermostatStatusResponse response2 = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());
 
-        // This is making the gRPC call
+        String unaryThermostatResponseString = "Temperature 1: " + response1.getTemp() + "°C\n" +
+                "Temperature 2: " + response2.getTemp() + "°C";
+
+        thermostatStatusOutputLabel.setText(unaryThermostatResponseString);
+    }
+
+    @FXML
+    private void showRobotStatus() {
+        // This is making the gRPC call for Robot status
         UnaryRobotStatusResponse response = robotServiceBlockingStub.getCurrentRobotStatus(Empty.getDefaultInstance());
 
         String unaryRobotResponseString = new StringBuilder()
@@ -79,13 +78,11 @@ public class NewSmartWarehouseFormController {
                 .toString();
 
         robotStatusOutputLabel.setText(unaryRobotResponseString);
-
     }
 
-    private void updateStorageStatus () {
-        System.out.println("Updating Storage status...");
-
-        // This is making the gRPC call
+    @FXML
+    private void showAllStorageStatus() {
+        // This is making the gRPC calls for all four storage statuses
         UnaryStorageStatusResponse response1 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
         UnaryStorageStatusResponse response2 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
         UnaryStorageStatusResponse response3 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
@@ -114,25 +111,5 @@ public class NewSmartWarehouseFormController {
                 .toString();
 
         storageStatusOutputLabel.setText(unaryStorageResponseString);
-
     }
-
-    private void updateThermostatStatus () {
-        System.out.println("Updating Thermostat status...");
-
-        // This is making the gRPC call
-        UnaryThermostatStatusResponse response = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());
-        UnaryThermostatStatusResponse response2 = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());
-
-        String unaryThermostatResponseString = new StringBuilder()
-                .append("Temperature: ")
-                .append(response.getTemp())
-                .append("°C")
-                .append("\n")
-                .toString();
-
-        thermostatStatusOutputLabel.setText(unaryThermostatResponseString);
-
-    }
-
 }

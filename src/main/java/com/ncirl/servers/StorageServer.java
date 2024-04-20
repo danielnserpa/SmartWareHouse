@@ -16,7 +16,7 @@ public class StorageServer {
 
     private Server server;
 
-    int port = 50056;
+    int port = 50057;
 
     public void start() throws IOException {
 

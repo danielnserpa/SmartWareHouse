@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package com.ncirl.thermostat; // I need to specify the package
+
+option java_multiple_files = true;
+option java_package = "com.ncirl.thermostat";
+option java_outer_classname = "ThermostatServiceProto";
+
+service ThermostatService {
+
+  rpc getCurrentThermostatStatus (google.protobuf.Empty) returns (UnaryThermostatStatusResponse);
+
+}
+
+message UnaryThermostatStatusResponse {
+
+  // Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
+  int32 temp = 1;
+}

@@ -39,7 +39,7 @@ public class NewSmartWarehouseFormController {
         updateRobotStatus();
 
         System.out.println("Storage form is initialising...");
-        storageServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50057)
+        storageServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50059)
                 .usePlaintext()
                 .build();
         storageServiceBlockingStub = StorageServiceGrpc.newBlockingStub(storageServiceManagedChannel);

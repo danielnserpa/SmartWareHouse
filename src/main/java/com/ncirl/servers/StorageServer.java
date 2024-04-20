@@ -1,5 +1,7 @@
 package com.ncirl.servers;
 
+import com.ecwid.consul.v1.ConsulClient;
+import com.ecwid.consul.v1.agent.model.NewService;
 import com.google.protobuf.Empty;
 import com.ncirl.common.Storage;
 import com.ncirl.storage.StorageServiceGrpc;
@@ -8,7 +10,11 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 
@@ -16,7 +22,7 @@ public class StorageServer {
 
     private Server server;
 
-    int port = 50057;
+    int port = 50059;
 
     public void start() throws IOException {
 
@@ -25,6 +31,8 @@ public class StorageServer {
                 .build()
                 .start();
         System.out.println("Storage Server started, listening on port " + port);
+
+        registerToConsul();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Shutting down gRPC server");
@@ -46,6 +54,43 @@ public class StorageServer {
         if (server != null) {
             server.awaitTermination();
         }
+    }
+
+    private void registerToConsul() {
+        System.out.println("Registering server to Consul...");
+
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream("src/main/resources/com/ncirl/storage-service.properties")) {
+            props.load(fis);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        String consulHost = props.getProperty("consul.host");
+        int consulPort = Integer.parseInt(props.getProperty("consul.port"));
+        String serviceName = props.getProperty("consul.service.name");
+        int servicePort = Integer.parseInt(props.getProperty("consul.service.port"));
+        String healthCheckInterval = props.getProperty("consul.service.healthCheckInterval");
+
+        String hostAddress;
+        try {
+            hostAddress = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        ConsulClient consulClient = new ConsulClient(consulHost, consulPort);
+
+        NewService newService = new NewService();
+        newService.setName(serviceName);
+        newService.setPort(servicePort);
+        newService.setAddress(hostAddress);
+
+        consulClient.agentServiceRegister(newService);
+
+        System.out.println("Server registered to Consul successfully. Host: " + hostAddress);
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {

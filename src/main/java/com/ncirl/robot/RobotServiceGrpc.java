@@ -46,35 +46,35 @@ public final class RobotServiceGrpc {
     return getGetCurrentRobotStatusMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<com.google.protobuf.Empty,
-      com.ncirl.robot.UnaryRobotStatusResponse> getStreamCurrentRobotStatusMethod;
+  private static volatile io.grpc.MethodDescriptor<com.ncirl.robot.StreamRobotStatusRequest,
+      com.ncirl.robot.StreamRobotStatusResponse> getStreamRobotStatusMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "StreamCurrentRobotStatus",
-      requestType = com.google.protobuf.Empty.class,
-      responseType = com.ncirl.robot.UnaryRobotStatusResponse.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
-  public static io.grpc.MethodDescriptor<com.google.protobuf.Empty,
-      com.ncirl.robot.UnaryRobotStatusResponse> getStreamCurrentRobotStatusMethod() {
-    io.grpc.MethodDescriptor<com.google.protobuf.Empty, com.ncirl.robot.UnaryRobotStatusResponse> getStreamCurrentRobotStatusMethod;
-    if ((getStreamCurrentRobotStatusMethod = RobotServiceGrpc.getStreamCurrentRobotStatusMethod) == null) {
+      fullMethodName = SERVICE_NAME + '/' + "streamRobotStatus",
+      requestType = com.ncirl.robot.StreamRobotStatusRequest.class,
+      responseType = com.ncirl.robot.StreamRobotStatusResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
+  public static io.grpc.MethodDescriptor<com.ncirl.robot.StreamRobotStatusRequest,
+      com.ncirl.robot.StreamRobotStatusResponse> getStreamRobotStatusMethod() {
+    io.grpc.MethodDescriptor<com.ncirl.robot.StreamRobotStatusRequest, com.ncirl.robot.StreamRobotStatusResponse> getStreamRobotStatusMethod;
+    if ((getStreamRobotStatusMethod = RobotServiceGrpc.getStreamRobotStatusMethod) == null) {
       synchronized (RobotServiceGrpc.class) {
-        if ((getStreamCurrentRobotStatusMethod = RobotServiceGrpc.getStreamCurrentRobotStatusMethod) == null) {
-          RobotServiceGrpc.getStreamCurrentRobotStatusMethod = getStreamCurrentRobotStatusMethod =
-              io.grpc.MethodDescriptor.<com.google.protobuf.Empty, com.ncirl.robot.UnaryRobotStatusResponse>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "StreamCurrentRobotStatus"))
+        if ((getStreamRobotStatusMethod = RobotServiceGrpc.getStreamRobotStatusMethod) == null) {
+          RobotServiceGrpc.getStreamRobotStatusMethod = getStreamRobotStatusMethod =
+              io.grpc.MethodDescriptor.<com.ncirl.robot.StreamRobotStatusRequest, com.ncirl.robot.StreamRobotStatusResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "streamRobotStatus"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.google.protobuf.Empty.getDefaultInstance()))
+                  com.ncirl.robot.StreamRobotStatusRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.ncirl.robot.UnaryRobotStatusResponse.getDefaultInstance()))
-              .setSchemaDescriptor(new RobotServiceMethodDescriptorSupplier("StreamCurrentRobotStatus"))
+                  com.ncirl.robot.StreamRobotStatusResponse.getDefaultInstance()))
+              .setSchemaDescriptor(new RobotServiceMethodDescriptorSupplier("streamRobotStatus"))
               .build();
         }
       }
     }
-    return getStreamCurrentRobotStatusMethod;
+    return getStreamRobotStatusMethod;
   }
 
   /**
@@ -134,9 +134,9 @@ public final class RobotServiceGrpc {
 
     /**
      */
-    default void streamCurrentRobotStatus(com.google.protobuf.Empty request,
-        io.grpc.stub.StreamObserver<com.ncirl.robot.UnaryRobotStatusResponse> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getStreamCurrentRobotStatusMethod(), responseObserver);
+    default io.grpc.stub.StreamObserver<com.ncirl.robot.StreamRobotStatusRequest> streamRobotStatus(
+        io.grpc.stub.StreamObserver<com.ncirl.robot.StreamRobotStatusResponse> responseObserver) {
+      return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getStreamRobotStatusMethod(), responseObserver);
     }
   }
 
@@ -177,10 +177,10 @@ public final class RobotServiceGrpc {
 
     /**
      */
-    public void streamCurrentRobotStatus(com.google.protobuf.Empty request,
-        io.grpc.stub.StreamObserver<com.ncirl.robot.UnaryRobotStatusResponse> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
-          getChannel().newCall(getStreamCurrentRobotStatusMethod(), getCallOptions()), request, responseObserver);
+    public io.grpc.stub.StreamObserver<com.ncirl.robot.StreamRobotStatusRequest> streamRobotStatus(
+        io.grpc.stub.StreamObserver<com.ncirl.robot.StreamRobotStatusResponse> responseObserver) {
+      return io.grpc.stub.ClientCalls.asyncClientStreamingCall(
+          getChannel().newCall(getStreamRobotStatusMethod(), getCallOptions()), responseObserver);
     }
   }
 
@@ -205,14 +205,6 @@ public final class RobotServiceGrpc {
     public com.ncirl.robot.UnaryRobotStatusResponse getCurrentRobotStatus(com.google.protobuf.Empty request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetCurrentRobotStatusMethod(), getCallOptions(), request);
-    }
-
-    /**
-     */
-    public java.util.Iterator<com.ncirl.robot.UnaryRobotStatusResponse> streamCurrentRobotStatus(
-        com.google.protobuf.Empty request) {
-      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
-          getChannel(), getStreamCurrentRobotStatusMethod(), getCallOptions(), request);
     }
   }
 
@@ -242,7 +234,7 @@ public final class RobotServiceGrpc {
   }
 
   private static final int METHODID_GET_CURRENT_ROBOT_STATUS = 0;
-  private static final int METHODID_STREAM_CURRENT_ROBOT_STATUS = 1;
+  private static final int METHODID_STREAM_ROBOT_STATUS = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -265,10 +257,6 @@ public final class RobotServiceGrpc {
           serviceImpl.getCurrentRobotStatus((com.google.protobuf.Empty) request,
               (io.grpc.stub.StreamObserver<com.ncirl.robot.UnaryRobotStatusResponse>) responseObserver);
           break;
-        case METHODID_STREAM_CURRENT_ROBOT_STATUS:
-          serviceImpl.streamCurrentRobotStatus((com.google.protobuf.Empty) request,
-              (io.grpc.stub.StreamObserver<com.ncirl.robot.UnaryRobotStatusResponse>) responseObserver);
-          break;
         default:
           throw new AssertionError();
       }
@@ -279,6 +267,9 @@ public final class RobotServiceGrpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_STREAM_ROBOT_STATUS:
+          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.streamRobotStatus(
+              (io.grpc.stub.StreamObserver<com.ncirl.robot.StreamRobotStatusResponse>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -295,12 +286,12 @@ public final class RobotServiceGrpc {
               com.ncirl.robot.UnaryRobotStatusResponse>(
                 service, METHODID_GET_CURRENT_ROBOT_STATUS)))
         .addMethod(
-          getStreamCurrentRobotStatusMethod(),
-          io.grpc.stub.ServerCalls.asyncServerStreamingCall(
+          getStreamRobotStatusMethod(),
+          io.grpc.stub.ServerCalls.asyncClientStreamingCall(
             new MethodHandlers<
-              com.google.protobuf.Empty,
-              com.ncirl.robot.UnaryRobotStatusResponse>(
-                service, METHODID_STREAM_CURRENT_ROBOT_STATUS)))
+              com.ncirl.robot.StreamRobotStatusRequest,
+              com.ncirl.robot.StreamRobotStatusResponse>(
+                service, METHODID_STREAM_ROBOT_STATUS)))
         .build();
   }
 
@@ -350,7 +341,7 @@ public final class RobotServiceGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new RobotServiceFileDescriptorSupplier())
               .addMethod(getGetCurrentRobotStatusMethod())
-              .addMethod(getStreamCurrentRobotStatusMethod())
+              .addMethod(getStreamRobotStatusMethod())
               .build();
         }
       }

@@ -12,19 +12,9 @@ service RobotService {
 
   rpc getCurrentRobotStatus (google.protobuf.Empty) returns (UnaryRobotStatusResponse);
 
-  rpc StreamCurrentRobotStatus (google.protobuf.Empty) returns (stream UnaryRobotStatusResponse);
+  rpc streamRobotStatus (stream StreamRobotStatusRequest) returns (StreamRobotStatusResponse);
 
 }
-
-
-// Nao preciso disso, pois a mensagem vai em branco
-
-//message UnaryRobotStatusRequest {
-//
-//  // Mensagem adicional extra para enviar ao servidor. Exemplo: "Me mande os dados do robo"
-//  string robotRequestMessage = 1;
-//
-//}
 
 message UnaryRobotStatusResponse {
 
@@ -33,4 +23,15 @@ message UnaryRobotStatusResponse {
   string robotStatus = 2;
   int32 robotBatteryLevel = 3;
 }
+
+message StreamRobotStatusRequest {
+  string robotName = 1;
+  string dateTime = 2;
+}
+
+message StreamRobotStatusResponse {
+  string message = 1;
+}
+
+
 

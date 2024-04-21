@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class ThermostatServer {
 
     private Server server;
-    int port = 50060;
+    int port = 50070;
 
     public void start() throws IOException {
 

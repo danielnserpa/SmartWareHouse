@@ -22,7 +22,7 @@ public class StorageServer {
 
     private Server server;
 
-    int port = 50059;
+    int port = 50079;
 
     public void start() throws IOException {
 

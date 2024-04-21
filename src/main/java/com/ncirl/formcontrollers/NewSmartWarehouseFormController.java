@@ -28,21 +28,21 @@ public class NewSmartWarehouseFormController {
 
     public void initialize() {
         System.out.println("Robot form is initializing...");
-        robotServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50054)
+        robotServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50074)
                 .usePlaintext()
                 .build();
         robotServiceBlockingStub = RobotServiceGrpc.newBlockingStub(robotServiceManagedChannel);
         System.out.println("Robot gRPC Channel created...");
 
         System.out.println("Storage form is initializing...");
-        storageServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50059)
+        storageServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50079)
                 .usePlaintext()
                 .build();
         storageServiceBlockingStub = StorageServiceGrpc.newBlockingStub(storageServiceManagedChannel);
         System.out.println("Storage gRPC Channel created...");
 
         System.out.println("Thermostat form is initializing...");
-        thermostatServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50060)
+        thermostatServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50070)
                 .usePlaintext()
                 .build();
         thermostatServiceBlockingStub = ThermostatServiceGrpc.newBlockingStub(thermostatServiceManagedChannel);

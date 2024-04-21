@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class RobotServer {
 
     private Server server;
-    int port = 50054;
+    int port = 50074;
 
     public void start() throws IOException {
 

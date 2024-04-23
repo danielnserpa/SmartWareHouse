@@ -29,13 +29,14 @@ public final class ThermostatServiceProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\027ThermostatService.proto\022\024com.ncirl.the" +
-      "rmostat\032\033google/protobuf/empty.proto\"-\n\035" +
+      "rmostat\032\033google/protobuf/empty.proto\"J\n\035" +
       "UnaryThermostatStatusResponse\022\014\n\004temp\030\001 " +
-      "\001(\0052~\n\021ThermostatService\022i\n\032getCurrentTh" +
-      "ermostatStatus\022\026.google.protobuf.Empty\0323" +
-      ".com.ncirl.thermostat.UnaryThermostatSta" +
-      "tusResponseB0\n\024com.ncirl.thermostatB\026The" +
-      "rmostatServiceProtoP\001b\006proto3"
+      "\001(\005\022\033\n\023heaterStatusMessage\030\002 \001(\t2~\n\021Ther" +
+      "mostatService\022i\n\032getCurrentThermostatSta" +
+      "tus\022\026.google.protobuf.Empty\0323.com.ncirl." +
+      "thermostat.UnaryThermostatStatusResponse" +
+      "B0\n\024com.ncirl.thermostatB\026ThermostatServ" +
+      "iceProtoP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -55,7 +56,7 @@ public final class ThermostatServiceProto {
     internal_static_com_ncirl_thermostat_UnaryThermostatStatusResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_ncirl_thermostat_UnaryThermostatStatusResponse_descriptor,
-        new java.lang.String[] { "Temp", });
+        new java.lang.String[] { "Temp", "HeaterStatusMessage", });
     com.google.protobuf.EmptyProto.getDescriptor();
   }
 

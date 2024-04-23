@@ -22,7 +22,7 @@ public class StorageServer {
 
     private Server server;
 
-    int port = 50079;
+    int port = 50089;
 
     public void start() throws IOException {
 
@@ -131,7 +131,6 @@ public class StorageServer {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }
-
 
 
     }

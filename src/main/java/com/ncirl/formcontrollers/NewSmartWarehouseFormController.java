@@ -10,8 +10,11 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -19,6 +22,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class NewSmartWarehouseFormController {
+
+    @FXML
+    public TextField nameTextField;
+    @FXML
+    public Button submitButton;
+
+
 
     public Label robotStreamingInfoLabel;
     private final ManagedChannel channel;
@@ -44,6 +54,12 @@ public class NewSmartWarehouseFormController {
     public Label thermostatStatusOutputLabel;
     private ThermostatServiceGrpc.ThermostatServiceBlockingStub thermostatServiceBlockingStub;
     private ManagedChannel thermostatServiceManagedChannel;
+    @FXML
+    void submitButtonClickOnAction(ActionEvent event) {
+        System.out.println("SubmitButtonClickOnAction clicked");
+        String name = nameTextField.getText();
+        System.out.println("nameTextField: " + name);
+    }
 
     public void initialize() {
         System.out.println("Robot form is initializing...");
@@ -54,7 +70,7 @@ public class NewSmartWarehouseFormController {
         System.out.println("Robot gRPC Channel created...");
 
         System.out.println("Storage form is initializing...");
-        storageServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50079)
+        storageServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50089)
                 .usePlaintext()
                 .build();
         storageServiceBlockingStub = StorageServiceGrpc.newBlockingStub(storageServiceManagedChannel);
@@ -268,3 +284,4 @@ public class NewSmartWarehouseFormController {
         robot.shutdown();
     }
 }
+

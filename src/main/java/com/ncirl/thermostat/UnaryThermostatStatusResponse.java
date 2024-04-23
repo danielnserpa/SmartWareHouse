@@ -17,6 +17,7 @@ private static final long serialVersionUID = 0L;
   }
   private UnaryThermostatStatusResponse() {
     temp_ = 0;
+    heaterStatusMessage_ = "";
   }
 
   @java.lang.Override
@@ -46,6 +47,12 @@ private static final long serialVersionUID = 0L;
           case 8: {
 
             temp_ = input.readInt32();
+            break;
+          }
+          case 18: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            heaterStatusMessage_ = s;
             break;
           }
           default: {
@@ -93,6 +100,40 @@ private static final long serialVersionUID = 0L;
     return temp_;
   }
 
+  public static final int HEATERSTATUSMESSAGE_FIELD_NUMBER = 2;
+  private volatile java.lang.Object heaterStatusMessage_;
+  /**
+   * <code>string heaterStatusMessage = 2;</code>
+   */
+  public java.lang.String getHeaterStatusMessage() {
+    java.lang.Object ref = heaterStatusMessage_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      heaterStatusMessage_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string heaterStatusMessage = 2;</code>
+   */
+  public com.google.protobuf.ByteString
+      getHeaterStatusMessageBytes() {
+    java.lang.Object ref = heaterStatusMessage_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      heaterStatusMessage_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -110,6 +151,9 @@ private static final long serialVersionUID = 0L;
     if (temp_ != 0) {
       output.writeInt32(1, temp_);
     }
+    if (!getHeaterStatusMessageBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, heaterStatusMessage_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -122,6 +166,9 @@ private static final long serialVersionUID = 0L;
     if (temp_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(1, temp_);
+    }
+    if (!getHeaterStatusMessageBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, heaterStatusMessage_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -141,6 +188,8 @@ private static final long serialVersionUID = 0L;
     boolean result = true;
     result = result && (getTemp()
         == other.getTemp());
+    result = result && getHeaterStatusMessage()
+        .equals(other.getHeaterStatusMessage());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -154,6 +203,8 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + TEMP_FIELD_NUMBER;
     hash = (53 * hash) + getTemp();
+    hash = (37 * hash) + HEATERSTATUSMESSAGE_FIELD_NUMBER;
+    hash = (53 * hash) + getHeaterStatusMessage().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -289,6 +340,8 @@ private static final long serialVersionUID = 0L;
       super.clear();
       temp_ = 0;
 
+      heaterStatusMessage_ = "";
+
       return this;
     }
 
@@ -316,6 +369,7 @@ private static final long serialVersionUID = 0L;
     public com.ncirl.thermostat.UnaryThermostatStatusResponse buildPartial() {
       com.ncirl.thermostat.UnaryThermostatStatusResponse result = new com.ncirl.thermostat.UnaryThermostatStatusResponse(this);
       result.temp_ = temp_;
+      result.heaterStatusMessage_ = heaterStatusMessage_;
       onBuilt();
       return result;
     }
@@ -366,6 +420,10 @@ private static final long serialVersionUID = 0L;
       if (other == com.ncirl.thermostat.UnaryThermostatStatusResponse.getDefaultInstance()) return this;
       if (other.getTemp() != 0) {
         setTemp(other.getTemp());
+      }
+      if (!other.getHeaterStatusMessage().isEmpty()) {
+        heaterStatusMessage_ = other.heaterStatusMessage_;
+        onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -430,6 +488,75 @@ private static final long serialVersionUID = 0L;
     public Builder clearTemp() {
       
       temp_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object heaterStatusMessage_ = "";
+    /**
+     * <code>string heaterStatusMessage = 2;</code>
+     */
+    public java.lang.String getHeaterStatusMessage() {
+      java.lang.Object ref = heaterStatusMessage_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        heaterStatusMessage_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string heaterStatusMessage = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getHeaterStatusMessageBytes() {
+      java.lang.Object ref = heaterStatusMessage_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        heaterStatusMessage_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string heaterStatusMessage = 2;</code>
+     */
+    public Builder setHeaterStatusMessage(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      heaterStatusMessage_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string heaterStatusMessage = 2;</code>
+     */
+    public Builder clearHeaterStatusMessage() {
+      
+      heaterStatusMessage_ = getDefaultInstance().getHeaterStatusMessage();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string heaterStatusMessage = 2;</code>
+     */
+    public Builder setHeaterStatusMessageBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      heaterStatusMessage_ = value;
       onChanged();
       return this;
     }

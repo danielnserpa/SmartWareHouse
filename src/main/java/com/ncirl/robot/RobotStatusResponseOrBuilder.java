@@ -3,8 +3,8 @@
 
 package com.ncirl.robot;
 
-public interface UnaryRobotStatusResponseOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:com.ncirl.robot.UnaryRobotStatusResponse)
+public interface RobotStatusResponseOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:com.ncirl.robot.RobotStatusResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**

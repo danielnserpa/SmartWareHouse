@@ -15,4 +15,14 @@ public interface UnaryThermostatStatusResponseOrBuilder extends
    * <code>int32 temp = 1;</code>
    */
   int getTemp();
+
+  /**
+   * <code>string heaterStatusMessage = 2;</code>
+   */
+  java.lang.String getHeaterStatusMessage();
+  /**
+   * <code>string heaterStatusMessage = 2;</code>
+   */
+  com.google.protobuf.ByteString
+      getHeaterStatusMessageBytes();
 }

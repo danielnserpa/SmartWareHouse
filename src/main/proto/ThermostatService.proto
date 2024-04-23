@@ -18,4 +18,5 @@ message UnaryThermostatStatusResponse {
 
   // Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
   int32 temp = 1;
+  string heaterStatusMessage = 2;
 }

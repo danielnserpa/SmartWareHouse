@@ -20,7 +20,6 @@ service RobotService {
 
 message UnaryRobotStatusResponse {
 
-  // Dados que serao passados para o cliente, apos o request. Sao as informacoes do robot.
   string robotName = 1;
   string robotStatus = 2;
   int32 robotBatteryLevel = 3;

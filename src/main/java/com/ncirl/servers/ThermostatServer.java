@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 public class ThermostatServer {
 
@@ -105,26 +106,38 @@ public class ThermostatServer {
 
     class ThermostatServiceImpl extends ThermostatServiceGrpc.ThermostatServiceImplBase {
 
-        Thermostat thermostat, thermostat2;
+        private final Random random = new Random();
+        private Thermostat thermostat;
 
         public ThermostatServiceImpl() {
-            thermostat = new Thermostat(17);
-            thermostat2 = new Thermostat(25);
+            // Initialize thermostat with a random temperature between 15 and 28 degrees
+            thermostat = new Thermostat(generateRandomTemperature());
         }
 
+        private int generateRandomTemperature() {
+            return random.nextInt(14) + 15; // Generates a random temperature between 15 and 28 degrees
+        }
 
         @Override
-        public void getCurrentThermostatStatus (Empty request, StreamObserver<UnaryThermostatStatusResponse> responseObserver) {
+        public void getCurrentThermostatStatus(Empty request, StreamObserver<UnaryThermostatStatusResponse> responseObserver) {
             System.out.println("Server side getThermostatStatus method invoked...");
 
+            // Generate a new random temperature every time this method is called
+            thermostat.setTemp(generateRandomTemperature());
+
+            // Get the current temperature and heater status message
+            int currentTemperature = thermostat.getTemp();
+            String heaterStatusMessage = thermostat.getHeaterStatusMessage();
+
+            // Create the response with the current temperature and heater status message
             UnaryThermostatStatusResponse response = UnaryThermostatStatusResponse.newBuilder()
-                    .setTemp(thermostat.getTemp())
+                    .setTemp(currentTemperature)
+                    .setHeaterStatusMessage(heaterStatusMessage)
                     .build();
 
+            // Send the response to the client
             responseObserver.onNext(response);
             responseObserver.onCompleted();
-
         }
-
     }
 }

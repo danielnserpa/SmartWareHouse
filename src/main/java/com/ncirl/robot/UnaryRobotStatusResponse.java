@@ -97,10 +97,6 @@ private static final long serialVersionUID = 0L;
   public static final int ROBOTNAME_FIELD_NUMBER = 1;
   private volatile java.lang.Object robotName_;
   /**
-   * <pre>
-   * Dados que serao passados para o cliente, apos o request. Sao as informacoes do robot.
-   * </pre>
-   *
    * <code>string robotName = 1;</code>
    */
   public java.lang.String getRobotName() {
@@ -116,10 +112,6 @@ private static final long serialVersionUID = 0L;
     }
   }
   /**
-   * <pre>
-   * Dados que serao passados para o cliente, apos o request. Sao as informacoes do robot.
-   * </pre>
-   *
    * <code>string robotName = 1;</code>
    */
   public com.google.protobuf.ByteString
@@ -518,10 +510,6 @@ private static final long serialVersionUID = 0L;
 
     private java.lang.Object robotName_ = "";
     /**
-     * <pre>
-     * Dados que serao passados para o cliente, apos o request. Sao as informacoes do robot.
-     * </pre>
-     *
      * <code>string robotName = 1;</code>
      */
     public java.lang.String getRobotName() {
@@ -537,10 +525,6 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <pre>
-     * Dados que serao passados para o cliente, apos o request. Sao as informacoes do robot.
-     * </pre>
-     *
      * <code>string robotName = 1;</code>
      */
     public com.google.protobuf.ByteString
@@ -557,10 +541,6 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <pre>
-     * Dados que serao passados para o cliente, apos o request. Sao as informacoes do robot.
-     * </pre>
-     *
      * <code>string robotName = 1;</code>
      */
     public Builder setRobotName(
@@ -574,10 +554,6 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <pre>
-     * Dados que serao passados para o cliente, apos o request. Sao as informacoes do robot.
-     * </pre>
-     *
      * <code>string robotName = 1;</code>
      */
     public Builder clearRobotName() {
@@ -587,10 +563,6 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <pre>
-     * Dados que serao passados para o cliente, apos o request. Sao as informacoes do robot.
-     * </pre>
-     *
      * <code>string robotName = 1;</code>
      */
     public Builder setRobotNameBytes(

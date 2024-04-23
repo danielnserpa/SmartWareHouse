@@ -12,8 +12,6 @@ service StorageService {
 
   rpc getCurrentStorageStatus (google.protobuf.Empty) returns (UnaryStorageStatusResponse);
 
-  rpc sendRobotWorkingDuration
-
 }
 
 message UnaryStorageStatusResponse {
@@ -22,3 +20,6 @@ message UnaryStorageStatusResponse {
   int32 storageId = 1;
   string storageStatus = 2;
 }
+
+
+

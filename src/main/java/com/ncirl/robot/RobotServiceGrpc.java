@@ -77,6 +77,37 @@ public final class RobotServiceGrpc {
     return getStreamRobotStatusMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.ncirl.robot.BidirectionalRequest,
+      com.ncirl.robot.BidirectionalResponse> getBidirectionalStreamMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "bidirectionalStream",
+      requestType = com.ncirl.robot.BidirectionalRequest.class,
+      responseType = com.ncirl.robot.BidirectionalResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
+  public static io.grpc.MethodDescriptor<com.ncirl.robot.BidirectionalRequest,
+      com.ncirl.robot.BidirectionalResponse> getBidirectionalStreamMethod() {
+    io.grpc.MethodDescriptor<com.ncirl.robot.BidirectionalRequest, com.ncirl.robot.BidirectionalResponse> getBidirectionalStreamMethod;
+    if ((getBidirectionalStreamMethod = RobotServiceGrpc.getBidirectionalStreamMethod) == null) {
+      synchronized (RobotServiceGrpc.class) {
+        if ((getBidirectionalStreamMethod = RobotServiceGrpc.getBidirectionalStreamMethod) == null) {
+          RobotServiceGrpc.getBidirectionalStreamMethod = getBidirectionalStreamMethod =
+              io.grpc.MethodDescriptor.<com.ncirl.robot.BidirectionalRequest, com.ncirl.robot.BidirectionalResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "bidirectionalStream"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.ncirl.robot.BidirectionalRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.ncirl.robot.BidirectionalResponse.getDefaultInstance()))
+              .setSchemaDescriptor(new RobotServiceMethodDescriptorSupplier("bidirectionalStream"))
+              .build();
+        }
+      }
+    }
+    return getBidirectionalStreamMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -138,6 +169,13 @@ public final class RobotServiceGrpc {
         io.grpc.stub.StreamObserver<com.ncirl.robot.StreamRobotStatusResponse> responseObserver) {
       return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getStreamRobotStatusMethod(), responseObserver);
     }
+
+    /**
+     */
+    default io.grpc.stub.StreamObserver<com.ncirl.robot.BidirectionalRequest> bidirectionalStream(
+        io.grpc.stub.StreamObserver<com.ncirl.robot.BidirectionalResponse> responseObserver) {
+      return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getBidirectionalStreamMethod(), responseObserver);
+    }
   }
 
   /**
@@ -181,6 +219,14 @@ public final class RobotServiceGrpc {
         io.grpc.stub.StreamObserver<com.ncirl.robot.StreamRobotStatusResponse> responseObserver) {
       return io.grpc.stub.ClientCalls.asyncClientStreamingCall(
           getChannel().newCall(getStreamRobotStatusMethod(), getCallOptions()), responseObserver);
+    }
+
+    /**
+     */
+    public io.grpc.stub.StreamObserver<com.ncirl.robot.BidirectionalRequest> bidirectionalStream(
+        io.grpc.stub.StreamObserver<com.ncirl.robot.BidirectionalResponse> responseObserver) {
+      return io.grpc.stub.ClientCalls.asyncBidiStreamingCall(
+          getChannel().newCall(getBidirectionalStreamMethod(), getCallOptions()), responseObserver);
     }
   }
 
@@ -235,6 +281,7 @@ public final class RobotServiceGrpc {
 
   private static final int METHODID_GET_CURRENT_ROBOT_STATUS = 0;
   private static final int METHODID_STREAM_ROBOT_STATUS = 1;
+  private static final int METHODID_BIDIRECTIONAL_STREAM = 2;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -270,6 +317,9 @@ public final class RobotServiceGrpc {
         case METHODID_STREAM_ROBOT_STATUS:
           return (io.grpc.stub.StreamObserver<Req>) serviceImpl.streamRobotStatus(
               (io.grpc.stub.StreamObserver<com.ncirl.robot.StreamRobotStatusResponse>) responseObserver);
+        case METHODID_BIDIRECTIONAL_STREAM:
+          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.bidirectionalStream(
+              (io.grpc.stub.StreamObserver<com.ncirl.robot.BidirectionalResponse>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -292,6 +342,13 @@ public final class RobotServiceGrpc {
               com.ncirl.robot.StreamRobotStatusRequest,
               com.ncirl.robot.StreamRobotStatusResponse>(
                 service, METHODID_STREAM_ROBOT_STATUS)))
+        .addMethod(
+          getBidirectionalStreamMethod(),
+          io.grpc.stub.ServerCalls.asyncBidiStreamingCall(
+            new MethodHandlers<
+              com.ncirl.robot.BidirectionalRequest,
+              com.ncirl.robot.BidirectionalResponse>(
+                service, METHODID_BIDIRECTIONAL_STREAM)))
         .build();
   }
 
@@ -342,6 +399,7 @@ public final class RobotServiceGrpc {
               .setSchemaDescriptor(new RobotServiceFileDescriptorSupplier())
               .addMethod(getGetCurrentRobotStatusMethod())
               .addMethod(getStreamRobotStatusMethod())
+              .addMethod(getBidirectionalStreamMethod())
               .build();
         }
       }

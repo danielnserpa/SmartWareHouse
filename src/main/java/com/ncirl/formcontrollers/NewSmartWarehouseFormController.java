@@ -1,10 +1,7 @@
 package com.ncirl.formcontrollers;
 
 import com.google.protobuf.Empty;
-import com.ncirl.robot.RobotServiceGrpc;
-import com.ncirl.robot.StreamRobotStatusRequest;
-import com.ncirl.robot.StreamRobotStatusResponse;
-import com.ncirl.robot.UnaryRobotStatusResponse;
+import com.ncirl.robot.*;
 import com.ncirl.storage.StorageServiceGrpc;
 import com.ncirl.storage.UnaryStorageStatusResponse;
 import com.ncirl.thermostat.ThermostatServiceGrpc;
@@ -18,6 +15,7 @@ import javafx.scene.control.Label;
 
 import java.time.LocalDateTime;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class NewSmartWarehouseFormController {
@@ -25,13 +23,14 @@ public class NewSmartWarehouseFormController {
     public Label robotStreamingInfoLabel;
     private final ManagedChannel channel;
     private final RobotServiceGrpc.RobotServiceStub stub;
+    private final RobotServiceGrpc.RobotServiceStub bidirectionalStub;
 
     public NewSmartWarehouseFormController(String host, int port) {
         this.channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build();
         this.stub = RobotServiceGrpc.newStub(channel);
-
+        this.bidirectionalStub = RobotServiceGrpc.newStub(channel);
     }
 
     public Label robotStatusOutputLabel;
@@ -68,6 +67,7 @@ public class NewSmartWarehouseFormController {
         thermostatServiceBlockingStub = ThermostatServiceGrpc.newBlockingStub(thermostatServiceManagedChannel);
         System.out.println("Thermostat gRPC Channel created...");
     }
+
     @FXML
     private void showRobotStatus() {
         // This is making the gRPC call for Robot status
@@ -132,8 +132,8 @@ public class NewSmartWarehouseFormController {
         thermostatStatusOutputLabel.setText(unaryThermostatResponseString);
     }
 
-    public void streamRobotStatus (String robotName){
-        StreamObserver<StreamRobotStatusRequest> requestObserver = stub.streamRobotStatus(new StreamObserver<>(){
+    public void streamRobotStatus(String robotName) {
+        StreamObserver<StreamRobotStatusRequest> requestObserver = stub.streamRobotStatus(new StreamObserver<>() {
 
             @Override
             public void onNext(StreamRobotStatusResponse response) {
@@ -171,12 +171,61 @@ public class NewSmartWarehouseFormController {
         requestObserver.onCompleted();
 
     }
-    public void shutdown() throws InterruptedException {
-        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
 
+    public void bidirectionalStreaming() {
+        // Create a CountDownLatch to synchronize the sending of the second request
+        CountDownLatch latch = new CountDownLatch(1);
+
+        StreamObserver<BidirectionalRequest> requestObserver = bidirectionalStub.bidirectionalStream(new StreamObserver<>() {
+            @Override
+            public void onNext(BidirectionalResponse response) {
+                System.out.println("Server response: " + response.getMessage());
+                // Decrement the latch count to allow sending the second request
+                latch.countDown();
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                System.err.println("Error from server: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Robot bidirectional stream completed.");
+            }
+        });
+
+        try {
+            // Send the initial message only once
+            String message = "Hello, Robot! What's your name?";
+            BidirectionalRequest initialRequest = BidirectionalRequest.newBuilder()
+                    .setMessage(message)
+                    .build();
+            System.out.println("Sending message to server: " + message);
+            requestObserver.onNext(initialRequest);
+
+            // Wait until the latch countdown completes (i.e., until the first response is received)
+            latch.await();
+
+            // Send the final message
+            String finalMessage = "Robot registered. Have a great shift!";
+            BidirectionalRequest finalRequest = BidirectionalRequest.newBuilder()
+                    .setMessage(finalMessage)
+                    .build();
+            System.out.println("Sending message to server: " + finalMessage);
+            requestObserver.onNext(finalRequest);
+
+        } catch (Exception e) {
+            System.err.println("Error while sending messages: " + e.getMessage());
+        }
+
+        // Don't send any more messages, just end the bidirectional stream
+        requestObserver.onCompleted();
     }
 
-
+    public void shutdown() throws InterruptedException {
+        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+    }
 
     public static void main(String[] args) throws InterruptedException {
         String host = "localhost";
@@ -185,24 +234,37 @@ public class NewSmartWarehouseFormController {
 
         NewSmartWarehouseFormController robot = new NewSmartWarehouseFormController(host, port);
 
+        CountDownLatch bidirectionalLatch = new CountDownLatch(1);
+
+        // Start bidirectional streaming
+        Thread bidirectionalStreamThread = new Thread(() -> {
+            robot.bidirectionalStreaming();
+            // Signal that bidirectional streaming has completed
+            bidirectionalLatch.countDown();
+        });
+
+        bidirectionalStreamThread.start();
+
+        bidirectionalLatch.await();
+
         // Start streaming client information
         Thread streamThread = new Thread(() -> robot.streamRobotStatus(robotName));
         streamThread.start();
 
+
         // Wait for user input to stop streaming
-        System.out.println("Press 'Q' to stop streaming robot information");
+
         Scanner scanner = new Scanner(System.in);
         while (true) {
+            System.out.println("\n" + "Press 'Q' to stop streaming robot information");
             String input = scanner.nextLine();
             if (input.equalsIgnoreCase("Q")) {
                 streamThread.interrupt();
+                bidirectionalStreamThread.interrupt();
                 break;
             }
         }
         // Shutdown client
         robot.shutdown();
-
-
     }
-
 }

@@ -5,6 +5,8 @@ import com.ecwid.consul.v1.agent.model.NewService;
 import com.google.protobuf.Empty;
 import com.ncirl.common.Robot;
 import com.ncirl.robot.RobotServiceGrpc;
+import com.ncirl.robot.StreamRobotStatusRequest;
+import com.ncirl.robot.StreamRobotStatusResponse;
 import com.ncirl.robot.UnaryRobotStatusResponse;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -126,43 +128,32 @@ public class RobotServer {
              responseObserver.onCompleted();
          }
 
-//         @Override
-//         public void streamCurrentRobotStatus (Empty request, StreamObserver<UnaryRobotStatusResponse> responseObserver){
-//             Runnable streamingTask = () -> {
-//                 try {
-//                     while (!Thread.currentThread().isInterrupted()){
-//                         String message = "The RobotServer is Streaming RobotStatuses";
-//                         Random r = new Random();
-//                         int statusLow = 1;
-//                                 int statusHigh = 4;
-//                         int statusResult = r.nextInt(statusHigh-statusLow) + statusLow;
-//                         String robotStatus;
-//
-//                         if (statusResult == 1) {
-//                             robotStatus = "Idle";
-//                         } else if (statusResult == 2) {
-//                             robotStatus = "Busy";
-//                         } else {
-//                             robotStatus = "Charging";
-//                         }
-//
-//                         int batteryLevelLow = 1;
-//                         int batteryLevelHigh = 4;
-//                         int batteryLevel = r.nextInt(batteryLevelHigh-batteryLevelLow) + batteryLevelLow;
-//
-//
-//                         UnaryRobotStatusResponse response = UnaryRobotStatusResponse.newBuilder()
-//                                 .setRobotName(message)
-//                                 .setRobotStatus(robotStatus)
-//                                 .setRobotBatteryLevel(batteryLevel)
-//                                 .build();
-//                         responseObserver.onNext(response);
-//                         Thread.sleep(5000);
-//                     }
-//                 }
-//             }
-//         }
+         public StreamObserver<StreamRobotStatusRequest> streamRobotStatus(StreamObserver<StreamRobotStatusResponse> responseObserver) {
+             return new StreamObserver<StreamRobotStatusRequest>() {
 
-    }
+                 @Override
+                 public void onNext(StreamRobotStatusRequest streamRobotRequest) {
+                     System.out.println("Received Robot information:");
+                     System.out.println("Active Robot name: " + streamRobotRequest.getRobotName());
+                     System.out.println("Date and Time: " + streamRobotRequest.getDateTime());
+                 }
 
+                 @Override
+                 public void onError(Throwable t) {
+                     System.err.println("Error in robot information streaming: " + t.getMessage());
+                 }
+
+                 public void onCompleted() {
+                     System.out.println("Robot information streaming completed");
+                     StreamRobotStatusResponse response = StreamRobotStatusResponse.newBuilder()
+                             .setMessage("Robot information streaming completed")
+                             .build();
+                     responseObserver.onNext(response);
+                     responseObserver.onCompleted();
+                 }
+             };
+         }
+     }
 }
+
+

@@ -2,6 +2,8 @@ package com.ncirl.formcontrollers;
 
 import com.google.protobuf.Empty;
 import com.ncirl.robot.RobotServiceGrpc;
+import com.ncirl.robot.StreamRobotStatusRequest;
+import com.ncirl.robot.StreamRobotStatusResponse;
 import com.ncirl.robot.UnaryRobotStatusResponse;
 import com.ncirl.storage.StorageServiceGrpc;
 import com.ncirl.storage.UnaryStorageStatusResponse;
@@ -9,10 +11,28 @@ import com.ncirl.thermostat.ThermostatServiceGrpc;
 import com.ncirl.thermostat.UnaryThermostatStatusResponse;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.StreamObserver;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+import java.time.LocalDateTime;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
 public class NewSmartWarehouseFormController {
+
+    public Label robotStreamingInfoLabel;
+    private final ManagedChannel channel;
+    private final RobotServiceGrpc.RobotServiceStub stub;
+
+    public NewSmartWarehouseFormController(String host, int port) {
+        this.channel = ManagedChannelBuilder.forAddress(host, port)
+                .usePlaintext()
+                .build();
+        this.stub = RobotServiceGrpc.newStub(channel);
+
+    }
 
     public Label robotStatusOutputLabel;
     private RobotServiceGrpc.RobotServiceBlockingStub robotServiceBlockingStub;
@@ -48,19 +68,6 @@ public class NewSmartWarehouseFormController {
         thermostatServiceBlockingStub = ThermostatServiceGrpc.newBlockingStub(thermostatServiceManagedChannel);
         System.out.println("Thermostat gRPC Channel created...");
     }
-
-    @FXML
-    private void showAllTemperatures() {
-        // This is making the gRPC calls for all temperatures
-        UnaryThermostatStatusResponse response1 = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());
-        UnaryThermostatStatusResponse response2 = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());
-
-        String unaryThermostatResponseString = "Temperature 1: " + response1.getTemp() + "°C\n" +
-                "Temperature 2: " + response2.getTemp() + "°C";
-
-        thermostatStatusOutputLabel.setText(unaryThermostatResponseString);
-    }
-
     @FXML
     private void showRobotStatus() {
         // This is making the gRPC call for Robot status
@@ -112,4 +119,90 @@ public class NewSmartWarehouseFormController {
 
         storageStatusOutputLabel.setText(unaryStorageResponseString);
     }
+
+    @FXML
+    private void showAllTemperatures() {
+        // This is making the gRPC calls for all temperatures
+        UnaryThermostatStatusResponse response1 = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());
+        UnaryThermostatStatusResponse response2 = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());
+
+        String unaryThermostatResponseString = "Temperature 1: " + response1.getTemp() + "°C\n" +
+                "Temperature 2: " + response2.getTemp() + "°C";
+
+        thermostatStatusOutputLabel.setText(unaryThermostatResponseString);
+    }
+
+    public void streamRobotStatus (String robotName){
+        StreamObserver<StreamRobotStatusRequest> requestObserver = stub.streamRobotStatus(new StreamObserver<>(){
+
+            @Override
+            public void onNext(StreamRobotStatusResponse response) {
+                System.out.println("Server response: " + response.getMessage());
+                Platform.runLater(() -> {
+                    robotStreamingInfoLabel.setText(response.getMessage());
+                });
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                System.err.println("Error in streaming robot information: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Streaming robot information completed");
+            }
+        });
+
+        try {
+            while (true) {
+                String dateTime = LocalDateTime.now().toString();
+                StreamRobotStatusRequest streamRobotRequest = StreamRobotStatusRequest.newBuilder()
+                        .setRobotName(robotName)
+                        .setDateTime(dateTime)
+                        .build();
+                requestObserver.onNext(streamRobotRequest);
+                Thread.sleep(5000); // Send information every 5 seconds
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        requestObserver.onCompleted();
+
+    }
+    public void shutdown() throws InterruptedException {
+        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+
+    }
+
+
+
+    public static void main(String[] args) throws InterruptedException {
+        String host = "localhost";
+        int port = 50074;
+        String robotName = "TOBOR";
+
+        NewSmartWarehouseFormController robot = new NewSmartWarehouseFormController(host, port);
+
+        // Start streaming client information
+        Thread streamThread = new Thread(() -> robot.streamRobotStatus(robotName));
+        streamThread.start();
+
+        // Wait for user input to stop streaming
+        System.out.println("Press 'Q' to stop streaming robot information");
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("Q")) {
+                streamThread.interrupt();
+                break;
+            }
+        }
+        // Shutdown client
+        robot.shutdown();
+
+
+    }
+
 }

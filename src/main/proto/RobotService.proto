@@ -14,6 +14,8 @@ service RobotService {
 
   rpc streamRobotStatus (stream StreamRobotStatusRequest) returns (StreamRobotStatusResponse);
 
+  rpc bidirectionalStream(stream BidirectionalRequest) returns (stream BidirectionalResponse);
+
 }
 
 message UnaryRobotStatusResponse {
@@ -32,6 +34,15 @@ message StreamRobotStatusRequest {
 message StreamRobotStatusResponse {
   string message = 1;
 }
+
+message BidirectionalRequest {
+  string message = 1;
+}
+
+message BidirectionalResponse {
+  string message = 1;
+}
+
 
 
 

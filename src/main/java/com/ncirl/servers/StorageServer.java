@@ -14,6 +14,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -99,39 +101,35 @@ public class StorageServer {
         server.blockUntilShutdown();
     }
 
-    class StorageServiceImpl extends StorageServiceGrpc.StorageServiceImplBase {
+    public class StorageServiceImpl extends StorageServiceGrpc.StorageServiceImplBase {
 
-        Storage storage, storage2, storage3, storage4;
+        private final List<Storage> storageList;
 
         public StorageServiceImpl() {
-            storage = new Storage(1, "Full");
-            storage2 = new Storage(2, "Empty");
-            storage3 = new Storage(3, "Empty");
-            storage4 = new Storage(4, "Full");
+            storageList = new ArrayList<>();
+            // Creating storage units with IDs and statuses
+            storageList.add(new Storage(1, "Full"));
+            storageList.add(new Storage(2, "Empty"));
+            storageList.add(new Storage(3, "Empty"));
+            storageList.add(new Storage(4, "Full"));
         }
 
         @Override
-        public void getCurrentStorageStatus (Empty request, StreamObserver<UnaryStorageStatusResponse> responseObserver) {
-            System.out.println("Server side getStorageStatus method invoked...");
+        public void getCurrentStorageStatus(Empty request, StreamObserver<UnaryStorageStatusResponse> responseObserver) {
+            System.out.println("Server side getCurrentStorageStatus method invoked...");
 
-            UnaryStorageStatusResponse response = UnaryStorageStatusResponse.newBuilder()
-                    .setStorageId(storage.getId())
-                    .setStorageStatus(storage.getStatus())
+            // Convert Storage objects to UnaryStorageStatusResponse messages
+            for (Storage storage : storageList) {
+                UnaryStorageStatusResponse response = UnaryStorageStatusResponse.newBuilder()
+                        .setStorageId(storage.getId())
+                        .setStorageStatus(storage.getStatus())
+                        .build();
+                // Send the response to the client observer
+                responseObserver.onNext(response);
+            }
 
-                    .setStorageId(storage2.getId())
-                    .setStorageStatus(storage2.getStatus())
-
-                    .setStorageId(storage3.getId())
-                    .setStorageStatus(storage3.getStatus())
-
-                    .setStorageId(storage4.getId())
-                    .setStorageStatus(storage4.getStatus())
-                    .build();
-
-            responseObserver.onNext(response);
+            // Complete the response
             responseObserver.onCompleted();
         }
-
-
     }
 }

@@ -23,7 +23,7 @@ public class NewSmartWareHouseApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent parent = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/com/ncirl/NewSmartWarehouseForm.fxml")));
         Scene scene = new Scene(parent, 800, 600);
-        primaryStage.setTitle("Smart Garden");
+        primaryStage.setTitle("Smart WareHouse");
         primaryStage.centerOnScreen();
         primaryStage.setScene(scene);
         primaryStage.show();

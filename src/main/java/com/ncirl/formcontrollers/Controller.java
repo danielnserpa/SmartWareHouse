@@ -1,9 +1,11 @@
 package com.ncirl.formcontrollers;
 
+import com.ncirl.storage.UnaryStorageStatusResponse;
 import com.google.protobuf.Empty;
 import com.ncirl.robot.RobotServiceGrpc;
 import com.ncirl.robot.UnaryRobotStatusResponse;
 import com.ncirl.storage.StorageServiceGrpc;
+import com.ncirl.storage.UnaryStorageStatusResponse;
 import com.ncirl.thermostat.ThermostatServiceGrpc;
 import com.ncirl.thermostat.UnaryThermostatStatusResponse;
 import io.grpc.ManagedChannel;
@@ -85,9 +87,21 @@ public class Controller {
     }
 
     private void showStorageStatus() {
-        // Implement logic to retrieve and display storage status
-    }
+        // This is making the gRPC call for Storage status
+        UnaryStorageStatusResponse response = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
 
+        StringBuilder storageStatusBuilder = new StringBuilder();
+        for (UnaryStorageStatusResponse.StorageStatus status : response.getStorageStatusList()) {
+            storageStatusBuilder.append("Storage ID: ")
+                    .append(status.getStorageId())
+                    .append(", Status: ")
+                    .append(status.getStorageStatus())
+                    .append("\n");
+        }
+
+        // Update the storage status label with the retrieved information
+        storageStatusLabel.setText(storageStatusBuilder.toString());
+    }
     private void showTemperature() {
         // This is making the gRPC call for Thermostat status
         UnaryThermostatStatusResponse response = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());

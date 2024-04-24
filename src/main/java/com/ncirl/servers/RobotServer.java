@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class RobotServer {
 
     private Server server;
-    int port = 50074;
+    int port = 50099;
 
     public void start() throws IOException {
 
@@ -113,7 +113,7 @@ public class RobotServer {
     static class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
 
         // Declare robot instance
-        private final Robot robot;
+        Robot robot;
         private boolean isFirstButtonClick = true;
 
         // Constructor to initialize the robot with name "TOBOR", status "Idle", and battery level 100
@@ -172,86 +172,80 @@ public class RobotServer {
             responseObserver.onNext(Empty.getDefaultInstance());
             responseObserver.onCompleted();
         }
-    }
+
         public StreamObserver<StreamRobotStatusRequest> streamRobotStatus(StreamObserver<StreamRobotStatusResponse> responseObserver) {
-             return new StreamObserver<>() {
-
-                 @Override
-                 public void onNext(StreamRobotStatusRequest streamRobotRequest) {
-                     System.out.println("Received Robot information:");
-                     System.out.println("Active Robot name: " + streamRobotRequest.getRobotName());
-
-                     LocalDateTime dateTime = LocalDateTime.parse(streamRobotRequest.getDateTime());
-
-                     // Format date as day-month-year
-                     String formattedDate = dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                     System.out.println("Date: " + formattedDate);
-
-                     // Format time as hours-minutes-seconds
-                     String formattedTime = dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-                     System.out.println("Time: " + formattedTime + "\n");
-                 }
-
-                 @Override
-                 public void onError(Throwable t) {
-                     System.err.println("Error in robot information streaming: " + t.getMessage());
-                 }
-
-                 public void onCompleted() {
-                     System.out.println("Robot information streaming completed");
-                     StreamRobotStatusResponse response = StreamRobotStatusResponse.newBuilder()
-                             .setMessage("Robot information streaming completed")
-                             .build();
-                     responseObserver.onNext(response);
-                     responseObserver.onCompleted();
-                 }
-             };
-         }
-
-        public StreamObserver<BidirectionalRequest> bidirectionalStream(StreamObserver<BidirectionalResponse> responseObserver) {
-            return new StreamObserver<>() {
-                private int requestCount = 0;
+            return new StreamObserver<StreamRobotStatusRequest>() {
 
                 @Override
-                public void onNext(BidirectionalRequest request) {
-                    System.out.println("Received message from client: " + request.getMessage());
-                    requestCount++;
-
-                    // Send the initial response after the first request
-                    if (requestCount == 1) {
-                        BidirectionalResponse initialResponse = BidirectionalResponse.newBuilder()
-                                .setMessage("Hello! My name is TOBOR")
-                                .build();
-                        responseObserver.onNext(initialResponse);
-                        System.out.println("Sent response: " + initialResponse.getMessage());
-                    }
-
-                    // Send the final response after the second request
-                    if (requestCount == 2) {
-                        BidirectionalResponse finalResponse = BidirectionalResponse.newBuilder()
-                                .setMessage("Thank you! BEEP BEEP! \uD83E\uDD16"
-                                + "\n")
-                                .build();
-                        responseObserver.onNext(finalResponse);
-                        System.out.println("Sent response: " + finalResponse.getMessage());
-                    }
+                public void onNext(StreamRobotStatusRequest streamRobotRequest) {
+                    System.out.println("Received Robot information:");
+                    System.out.println("Active Robot name: " + streamRobotRequest.getRobotName());
+                    System.out.println("Date and Time: " + streamRobotRequest.getDateTime());
                 }
-
                 @Override
                 public void onError(Throwable t) {
-                    System.err.println("Error from client: " + t.getMessage());
+                    System.err.println("Error in robot information streaming: " + t.getMessage());
                 }
 
-                @Override
                 public void onCompleted() {
-                    System.out.println("Robot bidirectional stream completed."
-                    + "\n");
-                    responseObserver.onCompleted(); // Complete the response stream
+                    System.out.println("Robot information streaming completed");
+                    StreamRobotStatusResponse response = StreamRobotStatusResponse.newBuilder()
+                            .setMessage("Robot information streaming completed")
+                            .build();
+                    responseObserver.onNext(response);
+                    responseObserver.onCompleted();
                 }
             };
         }
 
-            }
+    }
+
+}
+
+//        public StreamObserver<BidirectionalRequest> bidirectionalStream(StreamObserver<BidirectionalResponse> responseObserver) {
+//            return new StreamObserver<>() {
+//                private int requestCount = 0;
+//
+//                @Override
+//                public void onNext(BidirectionalRequest request) {
+//                    System.out.println("Received message from client: " + request.getMessage());
+//                    requestCount++;
+//
+//                    // Send the initial response after the first request
+//                    if (requestCount == 1) {
+//                        BidirectionalResponse initialResponse = BidirectionalResponse.newBuilder()
+//                                .setMessage("Hello! My name is TOBOR")
+//                                .build();
+//                        responseObserver.onNext(initialResponse);
+//                        System.out.println("Sent response: " + initialResponse.getMessage());
+//                    }
+//
+//                    // Send the final response after the second request
+//                    if (requestCount == 2) {
+//                        BidirectionalResponse finalResponse = BidirectionalResponse.newBuilder()
+//                                .setMessage("Thank you! BEEP BEEP! \uD83E\uDD16"
+//                                + "\n")
+//                                .build();
+//                        responseObserver.onNext(finalResponse);
+//                        System.out.println("Sent response: " + finalResponse.getMessage());
+//                    }
+//                }
+//
+//                @Override
+//                public void onError(Throwable t) {
+//                    System.err.println("Error from client: " + t.getMessage());
+//                }
+//
+//                @Override
+//                public void onCompleted() {
+//                    System.out.println("Robot bidirectional stream completed."
+//                    + "\n");
+//                    responseObserver.onCompleted(); // Complete the response stream
+//                }
+//            };
+//        }
+//
+//            }
 
 
 

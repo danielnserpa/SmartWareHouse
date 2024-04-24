@@ -45,7 +45,7 @@ public class Controller {
 
     public Controller() {
         // Initialize gRPC channels and stubs
-        this.robotServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50074)
+        this.robotServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50099)
                 .usePlaintext()
                 .build();
         this.robotServiceBlockingStub = RobotServiceGrpc.newBlockingStub(robotServiceManagedChannel);
@@ -85,13 +85,6 @@ public class Controller {
         System.out.println("ShowTemperatureButtonClick clicked");
         // Call the method to show temperature
         showTemperature();
-    }
-
-    @FXML
-    void startStreamingButtonClick() {
-        System.out.println("StartStreamingButtonClick clicked");
-        // Start streaming information
-        startStreaming();
     }
 
     private void toggleRobotStatus() {
@@ -164,29 +157,6 @@ public class Controller {
 
         // Update the temperature label with the temperature and heating message
         temperatureLabel.setText("Temperature: " + temperature + "°C" + (heatingMessage.isEmpty() ? "" : "\n" + heatingMessage));
-    }
-
-    private void startStreaming() {
-        // Simulate streaming information (replace this with your actual streaming logic)
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                // Update UI with streamed information
-                updateUIWithStreamedInfo();
-            }
-        }, 0, 1000); // Update every second
-    }
-
-    private void updateUIWithStreamedInfo() {
-        // Simulate generating streamed information
-        String streamedInfo = "Streamed info: " + Math.random(); // Example: random value
-
-        // Update UI components with streamed information
-        // For example:
-        // robotStatusLabel.setText(streamedInfo);
-        // storageStatusLabel.setText(streamedInfo);
-        // temperatureLabel.setText(streamedInfo);
     }
 
     public void shutdown() throws InterruptedException {

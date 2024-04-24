@@ -6,11 +6,12 @@ import com.google.protobuf.Empty;
 import com.ncirl.robot.RobotServiceGrpc;
 import com.ncirl.robot.UnaryRobotStatusResponse;
 import com.ncirl.storage.StorageServiceGrpc;
-import com.ncirl.storage.UnaryStorageStatusResponse;
+
 import com.ncirl.thermostat.ThermostatServiceGrpc;
 import com.ncirl.thermostat.UnaryThermostatStatusResponse;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import java.util.Random; // Import Random class
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -34,6 +35,8 @@ public class Controller {
     private final StorageServiceGrpc.StorageServiceBlockingStub storageServiceBlockingStub;
     private final ThermostatServiceGrpc.ThermostatServiceBlockingStub thermostatServiceBlockingStub;
 
+    private final Random random; // Declare Random object
+
     public Controller() {
         // Initialize gRPC channels and stubs
         this.robotServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50074)
@@ -50,6 +53,8 @@ public class Controller {
                 .usePlaintext()
                 .build();
         this.thermostatServiceBlockingStub = ThermostatServiceGrpc.newBlockingStub(thermostatServiceManagedChannel);
+
+        this.random = new Random(); // Initialize Random object
     }
 
     @FXML
@@ -63,6 +68,7 @@ public class Controller {
     void showStorageStatusButtonClick() {
         System.out.println("ShowStorageStatusButtonClick clicked");
         // Call the method to show storage status
+        updateStorageStatus(); // Update storage status before showing it
         showStorageStatus();
     }
 
@@ -90,7 +96,6 @@ public class Controller {
     private void showStorageStatus() {
         // This is making the gRPC call for Storage status
         UnaryStorageStatusResponse response = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
-
         StringBuilder storageStatusBuilder = new StringBuilder();
         for (StorageStatus status : response.getStorageStatusListList()) {
             storageStatusBuilder.append("Storage ID: ")
@@ -99,10 +104,26 @@ public class Controller {
                     .append(status.getStorageStatus())
                     .append("\n");
         }
-
         // Update the storage status label with the retrieved information
         storageStatusLabel.setText(storageStatusBuilder.toString());
     }
+
+    private void updateStorageStatus() {
+        // Update the storage status randomly
+        // This method should update the storage status
+        // Implement your logic here to update the status randomly or based on specific criteria
+
+        // In this example, we'll randomly update the status of each storage unit
+        UnaryStorageStatusResponse response = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
+        for (StorageStatus status : response.getStorageStatusListList()) {
+            // Randomly choose whether the storage status should be Full or Empty
+            String newStatus = random.nextBoolean() ? "Full" : "Empty";
+            // Update the status of the current storage unit
+            status = status.toBuilder().setStorageStatus(newStatus).build();
+        }
+    }
+
+
     private void showTemperature() {
         // This is making the gRPC call for Thermostat status
         UnaryThermostatStatusResponse response = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());

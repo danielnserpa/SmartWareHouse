@@ -5,6 +5,7 @@ import com.ecwid.consul.v1.agent.model.NewService;
 import com.google.protobuf.Empty;
 import com.ncirl.common.Storage;
 import com.ncirl.storage.StorageServiceGrpc;
+import com.ncirl.storage.StorageStatus;
 import com.ncirl.storage.UnaryStorageStatusResponse;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -112,6 +113,7 @@ public class StorageServer {
             storageList.add(new Storage(2, "Empty"));
             storageList.add(new Storage(3, "Empty"));
             storageList.add(new Storage(4, "Full"));
+
         }
 
         @Override
@@ -119,17 +121,19 @@ public class StorageServer {
             System.out.println("Server side getCurrentStorageStatus method invoked...");
 
             // Convert Storage objects to UnaryStorageStatusResponse messages
+            UnaryStorageStatusResponse.Builder responseBuilder = UnaryStorageStatusResponse.newBuilder();
             for (Storage storage : storageList) {
-                UnaryStorageStatusResponse response = UnaryStorageStatusResponse.newBuilder()
+                StorageStatus.Builder statusBuilder = StorageStatus.newBuilder()
                         .setStorageId(storage.getId())
-                        .setStorageStatus(storage.getStatus())
-                        .build();
-                // Send the response to the client observer
-                responseObserver.onNext(response);
+                        .setStorageStatus(storage.getStatus());
+                responseBuilder.addStorageStatusList(statusBuilder);
             }
 
+            // Send the response to the client observer
+            responseObserver.onNext(responseBuilder.build());
             // Complete the response
             responseObserver.onCompleted();
-        }
+             }
+         }
     }
-}
+

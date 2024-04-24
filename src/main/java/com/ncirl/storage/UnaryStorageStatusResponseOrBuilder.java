@@ -8,21 +8,26 @@ public interface UnaryStorageStatusResponseOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <pre>
-   * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
-   * </pre>
-   *
-   * <code>int32 storageId = 1;</code>
+   * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
    */
-  int getStorageId();
-
+  java.util.List<com.ncirl.storage.StorageStatus> 
+      getStorageStatusListList();
   /**
-   * <code>string storageStatus = 2;</code>
+   * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
    */
-  java.lang.String getStorageStatus();
+  com.ncirl.storage.StorageStatus getStorageStatusList(int index);
   /**
-   * <code>string storageStatus = 2;</code>
+   * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getStorageStatusBytes();
+  int getStorageStatusListCount();
+  /**
+   * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+   */
+  java.util.List<? extends com.ncirl.storage.StorageStatusOrBuilder> 
+      getStorageStatusListOrBuilderList();
+  /**
+   * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+   */
+  com.ncirl.storage.StorageStatusOrBuilder getStorageStatusListOrBuilder(
+      int index);
 }

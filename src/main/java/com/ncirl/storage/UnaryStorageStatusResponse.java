@@ -16,8 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private UnaryStorageStatusResponse() {
-    storageId_ = 0;
-    storageStatus_ = "";
+    storageStatusList_ = java.util.Collections.emptyList();
   }
 
   @java.lang.Override
@@ -44,15 +43,13 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 8: {
-
-            storageId_ = input.readInt32();
-            break;
-          }
-          case 18: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            storageStatus_ = s;
+          case 10: {
+            if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+              storageStatusList_ = new java.util.ArrayList<com.ncirl.storage.StorageStatus>();
+              mutable_bitField0_ |= 0x00000001;
+            }
+            storageStatusList_.add(
+                input.readMessage(com.ncirl.storage.StorageStatus.parser(), extensionRegistry));
             break;
           }
           default: {
@@ -70,6 +67,9 @@ private static final long serialVersionUID = 0L;
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
+      if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+        storageStatusList_ = java.util.Collections.unmodifiableList(storageStatusList_);
+      }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
@@ -87,51 +87,39 @@ private static final long serialVersionUID = 0L;
             com.ncirl.storage.UnaryStorageStatusResponse.class, com.ncirl.storage.UnaryStorageStatusResponse.Builder.class);
   }
 
-  public static final int STORAGEID_FIELD_NUMBER = 1;
-  private int storageId_;
+  public static final int STORAGESTATUSLIST_FIELD_NUMBER = 1;
+  private java.util.List<com.ncirl.storage.StorageStatus> storageStatusList_;
   /**
-   * <pre>
-   * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
-   * </pre>
-   *
-   * <code>int32 storageId = 1;</code>
+   * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
    */
-  public int getStorageId() {
-    return storageId_;
-  }
-
-  public static final int STORAGESTATUS_FIELD_NUMBER = 2;
-  private volatile java.lang.Object storageStatus_;
-  /**
-   * <code>string storageStatus = 2;</code>
-   */
-  public java.lang.String getStorageStatus() {
-    java.lang.Object ref = storageStatus_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      storageStatus_ = s;
-      return s;
-    }
+  public java.util.List<com.ncirl.storage.StorageStatus> getStorageStatusListList() {
+    return storageStatusList_;
   }
   /**
-   * <code>string storageStatus = 2;</code>
+   * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
    */
-  public com.google.protobuf.ByteString
-      getStorageStatusBytes() {
-    java.lang.Object ref = storageStatus_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      storageStatus_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public java.util.List<? extends com.ncirl.storage.StorageStatusOrBuilder> 
+      getStorageStatusListOrBuilderList() {
+    return storageStatusList_;
+  }
+  /**
+   * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+   */
+  public int getStorageStatusListCount() {
+    return storageStatusList_.size();
+  }
+  /**
+   * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+   */
+  public com.ncirl.storage.StorageStatus getStorageStatusList(int index) {
+    return storageStatusList_.get(index);
+  }
+  /**
+   * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+   */
+  public com.ncirl.storage.StorageStatusOrBuilder getStorageStatusListOrBuilder(
+      int index) {
+    return storageStatusList_.get(index);
   }
 
   private byte memoizedIsInitialized = -1;
@@ -148,11 +136,8 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (storageId_ != 0) {
-      output.writeInt32(1, storageId_);
-    }
-    if (!getStorageStatusBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, storageStatus_);
+    for (int i = 0; i < storageStatusList_.size(); i++) {
+      output.writeMessage(1, storageStatusList_.get(i));
     }
     unknownFields.writeTo(output);
   }
@@ -163,12 +148,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (storageId_ != 0) {
+    for (int i = 0; i < storageStatusList_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(1, storageId_);
-    }
-    if (!getStorageStatusBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, storageStatus_);
+        .computeMessageSize(1, storageStatusList_.get(i));
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -186,10 +168,8 @@ private static final long serialVersionUID = 0L;
     com.ncirl.storage.UnaryStorageStatusResponse other = (com.ncirl.storage.UnaryStorageStatusResponse) obj;
 
     boolean result = true;
-    result = result && (getStorageId()
-        == other.getStorageId());
-    result = result && getStorageStatus()
-        .equals(other.getStorageStatus());
+    result = result && getStorageStatusListList()
+        .equals(other.getStorageStatusListList());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -201,10 +181,10 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + STORAGEID_FIELD_NUMBER;
-    hash = (53 * hash) + getStorageId();
-    hash = (37 * hash) + STORAGESTATUS_FIELD_NUMBER;
-    hash = (53 * hash) + getStorageStatus().hashCode();
+    if (getStorageStatusListCount() > 0) {
+      hash = (37 * hash) + STORAGESTATUSLIST_FIELD_NUMBER;
+      hash = (53 * hash) + getStorageStatusListList().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -333,15 +313,18 @@ private static final long serialVersionUID = 0L;
     private void maybeForceBuilderInitialization() {
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
+        getStorageStatusListFieldBuilder();
       }
     }
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      storageId_ = 0;
-
-      storageStatus_ = "";
-
+      if (storageStatusListBuilder_ == null) {
+        storageStatusList_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+      } else {
+        storageStatusListBuilder_.clear();
+      }
       return this;
     }
 
@@ -368,8 +351,16 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.ncirl.storage.UnaryStorageStatusResponse buildPartial() {
       com.ncirl.storage.UnaryStorageStatusResponse result = new com.ncirl.storage.UnaryStorageStatusResponse(this);
-      result.storageId_ = storageId_;
-      result.storageStatus_ = storageStatus_;
+      int from_bitField0_ = bitField0_;
+      if (storageStatusListBuilder_ == null) {
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          storageStatusList_ = java.util.Collections.unmodifiableList(storageStatusList_);
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.storageStatusList_ = storageStatusList_;
+      } else {
+        result.storageStatusList_ = storageStatusListBuilder_.build();
+      }
       onBuilt();
       return result;
     }
@@ -418,12 +409,31 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(com.ncirl.storage.UnaryStorageStatusResponse other) {
       if (other == com.ncirl.storage.UnaryStorageStatusResponse.getDefaultInstance()) return this;
-      if (other.getStorageId() != 0) {
-        setStorageId(other.getStorageId());
-      }
-      if (!other.getStorageStatus().isEmpty()) {
-        storageStatus_ = other.storageStatus_;
-        onChanged();
+      if (storageStatusListBuilder_ == null) {
+        if (!other.storageStatusList_.isEmpty()) {
+          if (storageStatusList_.isEmpty()) {
+            storageStatusList_ = other.storageStatusList_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureStorageStatusListIsMutable();
+            storageStatusList_.addAll(other.storageStatusList_);
+          }
+          onChanged();
+        }
+      } else {
+        if (!other.storageStatusList_.isEmpty()) {
+          if (storageStatusListBuilder_.isEmpty()) {
+            storageStatusListBuilder_.dispose();
+            storageStatusListBuilder_ = null;
+            storageStatusList_ = other.storageStatusList_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+            storageStatusListBuilder_ = 
+              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                 getStorageStatusListFieldBuilder() : null;
+          } else {
+            storageStatusListBuilder_.addAllMessages(other.storageStatusList_);
+          }
+        }
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -453,112 +463,246 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+    private int bitField0_;
 
-    private int storageId_ ;
-    /**
-     * <pre>
-     * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
-     * </pre>
-     *
-     * <code>int32 storageId = 1;</code>
-     */
-    public int getStorageId() {
-      return storageId_;
-    }
-    /**
-     * <pre>
-     * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
-     * </pre>
-     *
-     * <code>int32 storageId = 1;</code>
-     */
-    public Builder setStorageId(int value) {
-      
-      storageId_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
-     * </pre>
-     *
-     * <code>int32 storageId = 1;</code>
-     */
-    public Builder clearStorageId() {
-      
-      storageId_ = 0;
-      onChanged();
-      return this;
+    private java.util.List<com.ncirl.storage.StorageStatus> storageStatusList_ =
+      java.util.Collections.emptyList();
+    private void ensureStorageStatusListIsMutable() {
+      if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+        storageStatusList_ = new java.util.ArrayList<com.ncirl.storage.StorageStatus>(storageStatusList_);
+        bitField0_ |= 0x00000001;
+       }
     }
 
-    private java.lang.Object storageStatus_ = "";
+    private com.google.protobuf.RepeatedFieldBuilderV3<
+        com.ncirl.storage.StorageStatus, com.ncirl.storage.StorageStatus.Builder, com.ncirl.storage.StorageStatusOrBuilder> storageStatusListBuilder_;
+
     /**
-     * <code>string storageStatus = 2;</code>
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
      */
-    public java.lang.String getStorageStatus() {
-      java.lang.Object ref = storageStatus_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        storageStatus_ = s;
-        return s;
+    public java.util.List<com.ncirl.storage.StorageStatus> getStorageStatusListList() {
+      if (storageStatusListBuilder_ == null) {
+        return java.util.Collections.unmodifiableList(storageStatusList_);
       } else {
-        return (java.lang.String) ref;
+        return storageStatusListBuilder_.getMessageList();
       }
     }
     /**
-     * <code>string storageStatus = 2;</code>
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
      */
-    public com.google.protobuf.ByteString
-        getStorageStatusBytes() {
-      java.lang.Object ref = storageStatus_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        storageStatus_ = b;
-        return b;
+    public int getStorageStatusListCount() {
+      if (storageStatusListBuilder_ == null) {
+        return storageStatusList_.size();
       } else {
-        return (com.google.protobuf.ByteString) ref;
+        return storageStatusListBuilder_.getCount();
       }
     }
     /**
-     * <code>string storageStatus = 2;</code>
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
      */
-    public Builder setStorageStatus(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      storageStatus_ = value;
-      onChanged();
+    public com.ncirl.storage.StorageStatus getStorageStatusList(int index) {
+      if (storageStatusListBuilder_ == null) {
+        return storageStatusList_.get(index);
+      } else {
+        return storageStatusListBuilder_.getMessage(index);
+      }
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public Builder setStorageStatusList(
+        int index, com.ncirl.storage.StorageStatus value) {
+      if (storageStatusListBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureStorageStatusListIsMutable();
+        storageStatusList_.set(index, value);
+        onChanged();
+      } else {
+        storageStatusListBuilder_.setMessage(index, value);
+      }
       return this;
     }
     /**
-     * <code>string storageStatus = 2;</code>
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
      */
-    public Builder clearStorageStatus() {
-      
-      storageStatus_ = getDefaultInstance().getStorageStatus();
-      onChanged();
+    public Builder setStorageStatusList(
+        int index, com.ncirl.storage.StorageStatus.Builder builderForValue) {
+      if (storageStatusListBuilder_ == null) {
+        ensureStorageStatusListIsMutable();
+        storageStatusList_.set(index, builderForValue.build());
+        onChanged();
+      } else {
+        storageStatusListBuilder_.setMessage(index, builderForValue.build());
+      }
       return this;
     }
     /**
-     * <code>string storageStatus = 2;</code>
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
      */
-    public Builder setStorageStatusBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      storageStatus_ = value;
-      onChanged();
+    public Builder addStorageStatusList(com.ncirl.storage.StorageStatus value) {
+      if (storageStatusListBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureStorageStatusListIsMutable();
+        storageStatusList_.add(value);
+        onChanged();
+      } else {
+        storageStatusListBuilder_.addMessage(value);
+      }
       return this;
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public Builder addStorageStatusList(
+        int index, com.ncirl.storage.StorageStatus value) {
+      if (storageStatusListBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureStorageStatusListIsMutable();
+        storageStatusList_.add(index, value);
+        onChanged();
+      } else {
+        storageStatusListBuilder_.addMessage(index, value);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public Builder addStorageStatusList(
+        com.ncirl.storage.StorageStatus.Builder builderForValue) {
+      if (storageStatusListBuilder_ == null) {
+        ensureStorageStatusListIsMutable();
+        storageStatusList_.add(builderForValue.build());
+        onChanged();
+      } else {
+        storageStatusListBuilder_.addMessage(builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public Builder addStorageStatusList(
+        int index, com.ncirl.storage.StorageStatus.Builder builderForValue) {
+      if (storageStatusListBuilder_ == null) {
+        ensureStorageStatusListIsMutable();
+        storageStatusList_.add(index, builderForValue.build());
+        onChanged();
+      } else {
+        storageStatusListBuilder_.addMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public Builder addAllStorageStatusList(
+        java.lang.Iterable<? extends com.ncirl.storage.StorageStatus> values) {
+      if (storageStatusListBuilder_ == null) {
+        ensureStorageStatusListIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, storageStatusList_);
+        onChanged();
+      } else {
+        storageStatusListBuilder_.addAllMessages(values);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public Builder clearStorageStatusList() {
+      if (storageStatusListBuilder_ == null) {
+        storageStatusList_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+      } else {
+        storageStatusListBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public Builder removeStorageStatusList(int index) {
+      if (storageStatusListBuilder_ == null) {
+        ensureStorageStatusListIsMutable();
+        storageStatusList_.remove(index);
+        onChanged();
+      } else {
+        storageStatusListBuilder_.remove(index);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public com.ncirl.storage.StorageStatus.Builder getStorageStatusListBuilder(
+        int index) {
+      return getStorageStatusListFieldBuilder().getBuilder(index);
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public com.ncirl.storage.StorageStatusOrBuilder getStorageStatusListOrBuilder(
+        int index) {
+      if (storageStatusListBuilder_ == null) {
+        return storageStatusList_.get(index);  } else {
+        return storageStatusListBuilder_.getMessageOrBuilder(index);
+      }
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public java.util.List<? extends com.ncirl.storage.StorageStatusOrBuilder> 
+         getStorageStatusListOrBuilderList() {
+      if (storageStatusListBuilder_ != null) {
+        return storageStatusListBuilder_.getMessageOrBuilderList();
+      } else {
+        return java.util.Collections.unmodifiableList(storageStatusList_);
+      }
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public com.ncirl.storage.StorageStatus.Builder addStorageStatusListBuilder() {
+      return getStorageStatusListFieldBuilder().addBuilder(
+          com.ncirl.storage.StorageStatus.getDefaultInstance());
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public com.ncirl.storage.StorageStatus.Builder addStorageStatusListBuilder(
+        int index) {
+      return getStorageStatusListFieldBuilder().addBuilder(
+          index, com.ncirl.storage.StorageStatus.getDefaultInstance());
+    }
+    /**
+     * <code>repeated .com.ncirl.storage.StorageStatus storageStatusList = 1;</code>
+     */
+    public java.util.List<com.ncirl.storage.StorageStatus.Builder> 
+         getStorageStatusListBuilderList() {
+      return getStorageStatusListFieldBuilder().getBuilderList();
+    }
+    private com.google.protobuf.RepeatedFieldBuilderV3<
+        com.ncirl.storage.StorageStatus, com.ncirl.storage.StorageStatus.Builder, com.ncirl.storage.StorageStatusOrBuilder> 
+        getStorageStatusListFieldBuilder() {
+      if (storageStatusListBuilder_ == null) {
+        storageStatusListBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+            com.ncirl.storage.StorageStatus, com.ncirl.storage.StorageStatus.Builder, com.ncirl.storage.StorageStatusOrBuilder>(
+                storageStatusList_,
+                ((bitField0_ & 0x00000001) == 0x00000001),
+                getParentForChildren(),
+                isClean());
+        storageStatusList_ = null;
+      }
+      return storageStatusListBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

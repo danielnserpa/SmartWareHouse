@@ -105,35 +105,35 @@ public class NewSmartWarehouseFormController {
 
     @FXML
     private void showAllStorageStatus() {
-        // This is making the gRPC calls for all four storage statuses
-        UnaryStorageStatusResponse response1 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
-        UnaryStorageStatusResponse response2 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
-        UnaryStorageStatusResponse response3 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
-        UnaryStorageStatusResponse response4 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
-
-        String unaryStorageResponseString = new StringBuilder()
-                .append("Storage 1 - ID: ")
-                .append(response1.getStorageId())
-                .append(", Status: ")
-                .append(response1.getStorageStatus())
-                .append("\n")
-                .append("Storage 2 - ID: ")
-                .append(response2.getStorageId())
-                .append(", Status: ")
-                .append(response2.getStorageStatus())
-                .append("\n")
-                .append("Storage 3 - ID: ")
-                .append(response3.getStorageId())
-                .append(", Status: ")
-                .append(response3.getStorageStatus())
-                .append("\n")
-                .append("Storage 4 - ID: ")
-                .append(response4.getStorageId())
-                .append(", Status: ")
-                .append(response4.getStorageStatus())
-                .toString();
-
-        storageStatusOutputLabel.setText(unaryStorageResponseString);
+//        // This is making the gRPC calls for all four storage statuses
+//        UnaryStorageStatusResponse response1 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
+//        UnaryStorageStatusResponse response2 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
+//        UnaryStorageStatusResponse response3 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
+//        UnaryStorageStatusResponse response4 = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
+//
+//        String unaryStorageResponseString = new StringBuilder()
+//                .append("Storage 1 - ID: ")
+//                .append(response1.getStorageId())
+//                .append(", Status: ")
+//                .append(response1.getStorageStatus())
+//                .append("\n")
+//                .append("Storage 2 - ID: ")
+//                .append(response2.getStorageId())
+//                .append(", Status: ")
+//                .append(response2.getStorageStatus())
+//                .append("\n")
+//                .append("Storage 3 - ID: ")
+//                .append(response3.getStorageId())
+//                .append(", Status: ")
+//                .append(response3.getStorageStatus())
+//                .append("\n")
+//                .append("Storage 4 - ID: ")
+//                .append(response4.getStorageId())
+//                .append(", Status: ")
+//                .append(response4.getStorageStatus())
+//                .toString();
+//
+//        storageStatusOutputLabel.setText(unaryStorageResponseString);
     }
 
     @FXML

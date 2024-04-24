@@ -1,5 +1,6 @@
 package com.ncirl.formcontrollers;
 
+import com.ncirl.storage.StorageStatus;
 import com.ncirl.storage.UnaryStorageStatusResponse;
 import com.google.protobuf.Empty;
 import com.ncirl.robot.RobotServiceGrpc;
@@ -91,7 +92,7 @@ public class Controller {
         UnaryStorageStatusResponse response = storageServiceBlockingStub.getCurrentStorageStatus(Empty.getDefaultInstance());
 
         StringBuilder storageStatusBuilder = new StringBuilder();
-        for (UnaryStorageStatusResponse.StorageStatus status : response.getStorageStatusList()) {
+        for (StorageStatus status : response.getStorageStatusListList()) {
             storageStatusBuilder.append("Storage ID: ")
                     .append(status.getStorageId())
                     .append(", Status: ")

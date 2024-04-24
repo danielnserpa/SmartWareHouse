@@ -73,7 +73,7 @@ public class RobotServer {
         int consulPort = Integer.parseInt(props.getProperty("consul.port"));
         String serviceName = props.getProperty("consul.service.name");
         int servicePort = Integer.parseInt(props.getProperty("consul.service.port"));
-        String healthCheckInterval = props.getProperty("consul.service.healthCheckInterval");
+
 
         // Get host address
         String hostAddress;
@@ -112,28 +112,69 @@ public class RobotServer {
 
     static class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
 
-        // Finish off implementing the server
-        Robot robot;
+        // Declare robot instance
+        private final Robot robot;
+        private boolean isFirstButtonClick = true;
 
+        // Constructor to initialize the robot with name "TOBOR", status "Idle", and battery level 100
         public RobotServiceImpl() {
-            robot = new Robot("TOBOR", "Idle", 100);
+            this.robot = new Robot("TOBOR", "Idle", 100);
         }
 
         @Override
         public void getCurrentRobotStatus(Empty request, StreamObserver<UnaryRobotStatusResponse> responseObserver) {
-            System.out.println("Server side getRobotStatus method invoked...");
+            // Get the current status and battery level
+            String currentStatus = robot.getStatus();
+            int batteryLevel = robot.getBatteryLevel();
+
+            // Build the response with the current status and battery level
             UnaryRobotStatusResponse response = UnaryRobotStatusResponse.newBuilder()
                     .setRobotName(robot.getName())
-                    .setRobotStatus(robot.getStatus())
-                    .setRobotBatteryLevel(robot.getBatteryLevel())
+                    .setRobotStatus(currentStatus)
+                    .setRobotBatteryLevel(batteryLevel)
                     .build();
 
+            // Send the response to the client
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }
 
-         public StreamObserver<StreamRobotStatusRequest> streamRobotStatus(StreamObserver<StreamRobotStatusResponse> responseObserver) {
-             return new StreamObserver<StreamRobotStatusRequest>() {
+        @Override
+        public void setRobotStatus(RobotStatus request, StreamObserver<Empty> responseObserver) {
+            // Set the new status of the robot
+            String newStatus = request.getRobotStatus();
+
+            // Update the robot status only after the first button click
+            if (!isFirstButtonClick) {
+                // If changing from Busy to Idle, decrease battery level by 10
+                if (newStatus.equals("Busy")) {
+                    int newBatteryLevel = robot.getBatteryLevel() - 10;
+                    robot.setBatteryLevel(Math.max(newBatteryLevel, 0)); // Ensure battery level doesn't go below 0
+                }
+
+                // If battery level drops from 20 to 10, change status to "Charging"
+                if (robot.getBatteryLevel() == 10 && !newStatus.equals("Charging")) {
+                    newStatus = "Charging";
+                }
+
+                // If battery level is 0, reset it to 100
+                if (robot.getBatteryLevel() == 0) {
+                    robot.setBatteryLevel(100);
+                    newStatus = "Idle"; // Set status to Idle after charging
+                }
+
+                robot.setStatus(newStatus);
+            } else {
+                isFirstButtonClick = false; // Update the flag after the first button click
+            }
+
+            // Send an empty response to the client
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        }
+    }
+        public StreamObserver<StreamRobotStatusRequest> streamRobotStatus(StreamObserver<StreamRobotStatusResponse> responseObserver) {
+             return new StreamObserver<>() {
 
                  @Override
                  public void onNext(StreamRobotStatusRequest streamRobotRequest) {
@@ -210,8 +251,7 @@ public class RobotServer {
             };
         }
 
-            };
-        }
+            }
 
 
 

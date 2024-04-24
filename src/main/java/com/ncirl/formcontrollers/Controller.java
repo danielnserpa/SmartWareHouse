@@ -1,5 +1,6 @@
 package com.ncirl.formcontrollers;
 
+import com.ncirl.robot.RobotStatus;
 import com.ncirl.storage.StorageStatus;
 import com.ncirl.storage.UnaryStorageStatusResponse;
 import com.google.protobuf.Empty;
@@ -15,8 +16,11 @@ import java.util.Random; // Import Random class
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 
 import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller {
 
@@ -26,6 +30,8 @@ public class Controller {
     private Label storageStatusLabel;
     @FXML
     private Label temperatureLabel;
+    @FXML
+    private Button startStreamingButton;
 
     private final ManagedChannel robotServiceManagedChannel;
     private final ManagedChannel storageServiceManagedChannel;
@@ -60,7 +66,9 @@ public class Controller {
     @FXML
     void showRobotStatusButtonClick() {
         System.out.println("ShowRobotStatusButtonClick clicked");
-        // Call the method to show robot status
+        // Call the method to toggle robot status
+        toggleRobotStatus();
+        // Refresh the robot status display
         showRobotStatus();
     }
 
@@ -77,6 +85,24 @@ public class Controller {
         System.out.println("ShowTemperatureButtonClick clicked");
         // Call the method to show temperature
         showTemperature();
+    }
+
+    @FXML
+    void startStreamingButtonClick() {
+        System.out.println("StartStreamingButtonClick clicked");
+        // Start streaming information
+        startStreaming();
+    }
+
+    private void toggleRobotStatus() {
+        // This is making the gRPC call for Robot status
+        UnaryRobotStatusResponse response = robotServiceBlockingStub.getCurrentRobotStatus(Empty.getDefaultInstance());
+        // Get the current status
+        String currentStatus = response.getRobotStatus();
+        // Toggle the status
+        String newStatus = currentStatus.equals("Busy") ? "Idle" : "Busy";
+        // Update the robot status
+        robotServiceBlockingStub.setRobotStatus(RobotStatus.newBuilder().setRobotStatus(newStatus).build());
     }
 
     private void showRobotStatus() {
@@ -123,7 +149,6 @@ public class Controller {
         }
     }
 
-
     private void showTemperature() {
         // This is making the gRPC call for Thermostat status
         UnaryThermostatStatusResponse response = thermostatServiceBlockingStub.getCurrentThermostatStatus(Empty.getDefaultInstance());
@@ -139,6 +164,29 @@ public class Controller {
 
         // Update the temperature label with the temperature and heating message
         temperatureLabel.setText("Temperature: " + temperature + "°C" + (heatingMessage.isEmpty() ? "" : "\n" + heatingMessage));
+    }
+
+    private void startStreaming() {
+        // Simulate streaming information (replace this with your actual streaming logic)
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                // Update UI with streamed information
+                updateUIWithStreamedInfo();
+            }
+        }, 0, 1000); // Update every second
+    }
+
+    private void updateUIWithStreamedInfo() {
+        // Simulate generating streamed information
+        String streamedInfo = "Streamed info: " + Math.random(); // Example: random value
+
+        // Update UI components with streamed information
+        // For example:
+        // robotStatusLabel.setText(streamedInfo);
+        // storageStatusLabel.setText(streamedInfo);
+        // temperatureLabel.setText(streamedInfo);
     }
 
     public void shutdown() throws InterruptedException {

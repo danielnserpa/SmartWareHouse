@@ -9,8 +9,9 @@
         <Button fx:id="showRobotStatusButton" layoutX="27.0" layoutY="22.0" mnemonicParsing="false" onAction="#showRobotStatusButtonClick" prefHeight="26.0" prefWidth="160.0" text="Show Robot Status" />
         <Button fx:id="showStorageStatusButton" layoutX="237.0" layoutY="22.0" mnemonicParsing="false" onAction="#showStorageStatusButtonClick" prefHeight="26.0" prefWidth="160.0" text="Show Storage Status" />
         <Button fx:id="showTemperatureButton" layoutX="456.0" layoutY="22.0" mnemonicParsing="false" onAction="#showTemperatureButtonClick" prefHeight="26.0" prefWidth="160.0" text="Show Temperature" />
-        <Label fx:id="robotStatusLabel" layoutX="27.0" layoutY="59.0" prefHeight="149.0" prefWidth="160.0" />
-        <Label fx:id="storageStatusLabel" layoutX="237.0" layoutY="63.0" prefHeight="140.0" prefWidth="190.0" />
-        <Label fx:id="temperatureLabel" layoutX="453.0" layoutY="64.0" prefHeight="140.0" prefWidth="248.0" />
+        <Button fx:id="startStreamingButton" layoutX="27.0" layoutY="60.0" mnemonicParsing="false" onAction="#startStreamingButtonClick" prefHeight="26.0" prefWidth="160.0" text="Start Streaming" />
+        <Label fx:id="robotStatusLabel" layoutX="27.0" layoutY="96.0" prefHeight="149.0" prefWidth="160.0" />
+        <Label fx:id="storageStatusLabel" layoutX="237.0" layoutY="100.0" prefHeight="140.0" prefWidth="190.0" />
+        <Label fx:id="temperatureLabel" layoutX="453.0" layoutY="101.0" prefHeight="140.0" prefWidth="248.0" />
     </children>
 </AnchorPane>

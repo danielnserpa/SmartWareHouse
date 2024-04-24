@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 
-package com.ncirl.robot; // I need to specify the package
+package com.ncirl.robot;
 
 option java_multiple_files = true;
 option java_package = "com.ncirl.robot";
@@ -16,6 +16,8 @@ service RobotService {
 
   rpc bidirectionalStream(stream BidirectionalRequest) returns (stream BidirectionalResponse);
 
+  // New RPC method to set the robot status
+  rpc SetRobotStatus(RobotStatus) returns (google.protobuf.Empty);
 }
 
 message UnaryRobotStatusResponse {
@@ -42,6 +44,7 @@ message BidirectionalResponse {
   string message = 1;
 }
 
-
-
-
+// New message to set the robot status
+message RobotStatus {
+  string robotStatus = 1;
+}

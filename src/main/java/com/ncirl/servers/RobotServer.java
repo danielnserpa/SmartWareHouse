@@ -181,6 +181,7 @@ public class RobotServer {
                     System.out.println("Received Robot information:");
                     System.out.println("Active Robot name: " + streamRobotRequest.getRobotName());
                     System.out.println("Date and Time: " + streamRobotRequest.getDateTime());
+                    System.out.println("\n");
                 }
                 @Override
                 public void onError(Throwable t) {
@@ -198,54 +199,52 @@ public class RobotServer {
             };
         }
 
-    }
+                public StreamObserver<BidirectionalRequest> bidirectionalStream(StreamObserver<BidirectionalResponse> responseObserver) {
+                return new StreamObserver<>() {
+                private int requestCount = 0;
 
+                @Override
+                public void onNext(BidirectionalRequest request) {
+                    System.out.println("Received message from client: " + request.getMessage());
+                    requestCount++;
+
+                    // Send the initial response after the first request
+                    if (requestCount == 1) {
+                        BidirectionalResponse initialResponse = BidirectionalResponse.newBuilder()
+                                .setMessage("Hello! My name is TOBOR")
+                                .build();
+                        responseObserver.onNext(initialResponse);
+                        System.out.println("Sent response: " + initialResponse.getMessage());
+                    }
+
+                    // Send the final response after the second request
+                    if (requestCount == 2) {
+                        BidirectionalResponse finalResponse = BidirectionalResponse.newBuilder()
+                                .setMessage("Thank you! BEEP BEEP! \uD83E\uDD16"
+                                + "\n")
+                                .build();
+                        responseObserver.onNext(finalResponse);
+                        System.out.println("Sent response: " + finalResponse.getMessage());
+                    }
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    System.err.println("Error from client: " + t.getMessage());
+                }
+
+                @Override
+                public void onCompleted() {
+                    System.out.println("Robot bidirectional stream completed."
+                    + "\n");
+                    responseObserver.onCompleted(); // Complete the response stream
+                }
+            };
+        }
+    }
 }
 
-//        public StreamObserver<BidirectionalRequest> bidirectionalStream(StreamObserver<BidirectionalResponse> responseObserver) {
-//            return new StreamObserver<>() {
-//                private int requestCount = 0;
-//
-//                @Override
-//                public void onNext(BidirectionalRequest request) {
-//                    System.out.println("Received message from client: " + request.getMessage());
-//                    requestCount++;
-//
-//                    // Send the initial response after the first request
-//                    if (requestCount == 1) {
-//                        BidirectionalResponse initialResponse = BidirectionalResponse.newBuilder()
-//                                .setMessage("Hello! My name is TOBOR")
-//                                .build();
-//                        responseObserver.onNext(initialResponse);
-//                        System.out.println("Sent response: " + initialResponse.getMessage());
-//                    }
-//
-//                    // Send the final response after the second request
-//                    if (requestCount == 2) {
-//                        BidirectionalResponse finalResponse = BidirectionalResponse.newBuilder()
-//                                .setMessage("Thank you! BEEP BEEP! \uD83E\uDD16"
-//                                + "\n")
-//                                .build();
-//                        responseObserver.onNext(finalResponse);
-//                        System.out.println("Sent response: " + finalResponse.getMessage());
-//                    }
-//                }
-//
-//                @Override
-//                public void onError(Throwable t) {
-//                    System.err.println("Error from client: " + t.getMessage());
-//                }
-//
-//                @Override
-//                public void onCompleted() {
-//                    System.out.println("Robot bidirectional stream completed."
-//                    + "\n");
-//                    responseObserver.onCompleted(); // Complete the response stream
-//                }
-//            };
-//        }
-//
-//            }
+
 
 
 

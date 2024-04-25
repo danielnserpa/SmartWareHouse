@@ -11,7 +11,6 @@ import com.ncirl.thermostat.UnaryThermostatStatusResponse;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -106,13 +105,13 @@ public class ThermostatServer {
         server.blockUntilShutdown();
     }
 
-    class ThermostatServiceImpl extends ThermostatServiceGrpc.ThermostatServiceImplBase {
+    static class ThermostatServiceImpl extends ThermostatServiceGrpc.ThermostatServiceImplBase {
 
         private final Random random = new Random();
-        private Thermostat thermostat;
+        private final Thermostat thermostat;
 
         public ThermostatServiceImpl() {
-            // Initialize thermostat with a random temperature between 15 and 28 degrees
+            // Initialize thermostat with a random temperature
             thermostat = new Thermostat(generateRandomTemperature());
         }
 
@@ -142,7 +141,6 @@ public class ThermostatServer {
             responseObserver.onCompleted();
         }
 
-
         @Override
         public void streamThermoStatus(StreamThermoStatusRequest request, StreamObserver<StreamThermoStatusResponse> responseObserver) {
 
@@ -151,17 +149,13 @@ public class ThermostatServer {
             Runnable streamingTask = () -> {
                 try {
                     while (!Thread.currentThread().isInterrupted()) {
-                        int temperature = random.nextInt(30 - 15 + 1) + 15;  // Adjust as needed (15 to 29 for exclusive)
+                        int temperature = random.nextInt(30 - 15 + 1) + 15;
                         String message = "Current temperature at " + temperature + "ºC";
 
-                        // Heater control logic
                         if (temperature < 18) {
                             message += " Sending request to turn on heater.";
-                            // Implement logic to send heater ON request (replace with your actual implementation)
-                            // This could involve calling another gRPC service or sending a message to a different system
                         } else if (temperature > 25) {
                             message += " Sending request to turn off heater.";
-                            // Implement logic to send heater OFF request (replace with your placeholder)
                         }
 
                         StreamThermoStatusResponse response = StreamThermoStatusResponse.newBuilder()
@@ -180,8 +174,4 @@ public class ThermostatServer {
             streamingThread.start();
         }
     }
-
-
 }
-
-

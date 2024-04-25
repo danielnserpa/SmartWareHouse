@@ -9,7 +9,6 @@ import com.ncirl.storage.UnaryStorageStatusResponse;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -23,9 +22,9 @@ import java.util.concurrent.TimeUnit;
 public class StorageServer {
 
     private Server server;
-    private final int port = 50089;
 
     public void start() throws IOException {
+        int port = 50089;
         server = ServerBuilder.forPort(port)
                 .addService(new StorageServiceImpl())
                 .build()
@@ -74,12 +73,16 @@ public class StorageServer {
             e.printStackTrace();
             return;
         }
+
         ConsulClient consulClient = new ConsulClient(consulHost, consulPort);
+
         NewService newService = new NewService();
+
         newService.setName(serviceName);
         newService.setPort(servicePort);
         newService.setAddress(hostAddress);
         consulClient.agentServiceRegister(newService);
+
         System.out.println("Server registered to Consul successfully. Host: " + hostAddress);
     }
 
@@ -95,9 +98,10 @@ public class StorageServer {
         private final Random random;
 
         public StorageServiceImpl() {
+
             storageStatusList = new ArrayList<>();
             random = new Random();
-            // Creating storage units with IDs and statuses
+
             for (int i = 1; i <= 4; i++) {
                 storageStatusList.add(generateRandomStorageStatus(i));
             }
@@ -106,28 +110,28 @@ public class StorageServer {
         @Override
         public void getCurrentStorageStatus(Empty request, StreamObserver<UnaryStorageStatusResponse> responseObserver) {
             System.out.println("Server side getCurrentStorageStatus method invoked...");
+
             // Update storage status before sending the response
             updateStorageStatus();
+
             UnaryStorageStatusResponse.Builder responseBuilder = UnaryStorageStatusResponse.newBuilder();
+
             for (StorageStatus status : storageStatusList) {
                 responseBuilder.addStorageStatusList(status);
             }
+
             responseObserver.onNext(responseBuilder.build());
             responseObserver.onCompleted();
+
         }
 
         private void updateStorageStatus() {
-            // Update the storage status randomly
-            // This method should update the storage status
-            // Implement your logic here to update the status randomly or based on specific criteria
 
-            // In this example, we'll randomly update the status of each storage unit
-            for (int i = 0; i < storageStatusList.size(); i++) {
+            storageStatusList.replaceAll(storageStatus -> {
                 // Randomly choose whether the storage status should be Full or Empty
-                String newStatus = random.nextBoolean() ? "Full" : "Empty";
                 // Update the status of the current storage unit in the storageStatusList
-                storageStatusList.set(i, storageStatusList.get(i).toBuilder().setStorageStatus(newStatus).build());
-            }
+                return storageStatus.toBuilder().setStorageStatus(random.nextBoolean() ? "Full" : "Empty").build();
+            });
         }
 
         private static StorageStatus generateRandomStorageStatus(int storageId) {

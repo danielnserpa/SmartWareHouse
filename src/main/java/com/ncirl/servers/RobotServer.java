@@ -8,14 +8,10 @@ import com.ncirl.robot.*;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
-
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -102,27 +98,27 @@ public class RobotServer {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
+
         RobotServer server = new RobotServer();
 
         server.start();
         server.blockUntilShutdown();
 
-
     }
 
     static class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
 
-        // Declare robot instance
         Robot robot;
         private boolean isFirstButtonClick = true;
 
-        // Constructor to initialize the robot with name "TOBOR", status "Idle", and battery level 100
+        // Constructor to initialize the robot
         public RobotServiceImpl() {
             this.robot = new Robot("TOBOR", "Idle", 100);
         }
 
         @Override
         public void getCurrentRobotStatus(Empty request, StreamObserver<UnaryRobotStatusResponse> responseObserver) {
+
             // Get the current status and battery level
             String currentStatus = robot.getStatus();
             int batteryLevel = robot.getBatteryLevel();
@@ -141,6 +137,7 @@ public class RobotServer {
 
         @Override
         public void setRobotStatus(RobotStatus request, StreamObserver<Empty> responseObserver) {
+
             // Set the new status of the robot
             String newStatus = request.getRobotStatus();
 
@@ -152,7 +149,7 @@ public class RobotServer {
                     robot.setBatteryLevel(Math.max(newBatteryLevel, 0)); // Ensure battery level doesn't go below 0
                 }
 
-                // If battery level drops from 20 to 10, change status to "Charging"
+                // When battery level drops from 20 to 10, change status to "Charging"
                 if (robot.getBatteryLevel() == 10 && !newStatus.equals("Charging")) {
                     newStatus = "Charging";
                 }
@@ -162,28 +159,28 @@ public class RobotServer {
                     robot.setBatteryLevel(100);
                     newStatus = "Idle"; // Set status to Idle after charging
                 }
-
                 robot.setStatus(newStatus);
+
             } else {
                 isFirstButtonClick = false; // Update the flag after the first button click
             }
 
-            // Send an empty response to the client
             responseObserver.onNext(Empty.getDefaultInstance());
             responseObserver.onCompleted();
         }
 
         public StreamObserver<StreamRobotStatusRequest> streamRobotStatus(StreamObserver<StreamRobotStatusResponse> responseObserver) {
-            return new StreamObserver<StreamRobotStatusRequest>() {
+            return new StreamObserver<>() {
 
                 @Override
                 public void onNext(StreamRobotStatusRequest streamRobotRequest) {
                     System.out.println("Received Robot information:");
                     System.out.println("Active Robot name: " + streamRobotRequest.getRobotName());
                     System.out.println("Date and Time: " + streamRobotRequest.getDateTime());
-                    System.out.println("Battery Level: " + streamRobotRequest.getStreamBatteryLevel() );
+                    System.out.println("Battery Level: " + streamRobotRequest.getStreamBatteryLevel());
                     System.out.println("\n");
                 }
+
                 @Override
                 public void onError(Throwable t) {
                     System.err.println("Error in robot information streaming: " + t.getMessage());
@@ -199,7 +196,6 @@ public class RobotServer {
                 }
             };
         }
-
                 public StreamObserver<BidirectionalRequest> bidirectionalStream(StreamObserver<BidirectionalResponse> responseObserver) {
                 return new StreamObserver<>() {
                 private int requestCount = 0;
@@ -244,13 +240,3 @@ public class RobotServer {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-

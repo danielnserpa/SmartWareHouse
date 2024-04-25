@@ -104,7 +104,6 @@ public class StreamingController {
         });
 
         try {
-            // Send the initial message only once
             String message = "Hello, Robot! What's your name?";
             BidirectionalRequest initialRequest = BidirectionalRequest.newBuilder()
                     .setMessage(message)
@@ -112,7 +111,7 @@ public class StreamingController {
             System.out.println("Sending message to server: " + message);
             requestObserver.onNext(initialRequest);
 
-            // Wait until the latch countdown completes (i.e., until the first response is received)
+            // Wait until the latch countdown completes
             latch.await();
 
             // Send the final message
@@ -126,13 +125,11 @@ public class StreamingController {
         } catch (Exception e) {
             System.err.println("Error while sending messages: " + e.getMessage());
         }
-
-        // Don't send any more messages, just end the bidirectional stream
         requestObserver.onCompleted();
     }
 
     public void streamThermoStatus() {
-        StreamObserver<StreamThermoStatusResponse> responseObserver = new StreamObserver<StreamThermoStatusResponse>() {
+        StreamObserver<StreamThermoStatusResponse> responseObserver = new StreamObserver<>() {
             @Override
             public void onNext(StreamThermoStatusResponse response) {
                 System.out.println("Temperature Streaming: " + response.getMessage());
@@ -152,55 +149,44 @@ public class StreamingController {
     }
 
     public static void main(String[] args) throws InterruptedException {
+
         String host = "localhost";
         int robotPort = 50099;
-        String robotName = "PX7Y";
         int thermoPort = 50070;
+        String robotName = "PX7Y";
 
         StreamingController robot = new StreamingController(host, robotPort);
         StreamingController temperature = new StreamingController(host, thermoPort);
         temperature.streamThermoStatus();
-
-
-
-                // biredctional
 
                 CountDownLatch bidirectionalLatch = new CountDownLatch(1);
 
                 // Start bidirectional streaming
                 Thread bidirectionalStreamThread = new Thread(() -> {
                     robot.bidirectionalStreaming();
-                    // Signal that bidirectional streaming has completed
+                    // Bidirectional streaming has completed
                     bidirectionalLatch.countDown();
                 });
 
                 bidirectionalStreamThread.start();
-
                 bidirectionalLatch.await();
 
                 // Start streaming client information
                 Thread streamThread = new Thread(() -> robot.streamRobotStatus(robotName));
                 streamThread.start();
 
-
                 // Wait for user input to stop streaming
-
                 Scanner scanner = new Scanner(System.in);
                 while (true) {
-                    System.out.println("\n" + "Press 'Q' to stop streaming robot information");
+                    System.out.println("\n" + "Press 'Q' to stop streaming robot information"
+                    + "\n");
                     String robotInput = scanner.nextLine();
                     if (robotInput.equalsIgnoreCase("Q")) {
                         streamThread.interrupt();
                         break;
                     }
-
                 }
                 // Shutdown client
                 robot.shutdown();
             }
-
-
         }
-
-
-

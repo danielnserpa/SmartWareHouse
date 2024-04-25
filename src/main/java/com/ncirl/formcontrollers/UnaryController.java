@@ -18,11 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 
-import java.util.concurrent.TimeUnit;
-import java.util.Timer;
-import java.util.TimerTask;
-
-public class Controller {
+public class UnaryController {
 
     @FXML
     private Label robotStatusLabel;
@@ -43,7 +39,7 @@ public class Controller {
 
     private final Random random; // Declare Random object
 
-    public Controller() {
+    public UnaryController() {
         // Initialize gRPC channels and stubs
         this.robotServiceManagedChannel = ManagedChannelBuilder.forAddress("localhost", 50099)
                 .usePlaintext()
@@ -159,9 +155,4 @@ public class Controller {
         temperatureLabel.setText("Temperature: " + temperature + "°C" + (heatingMessage.isEmpty() ? "" : "\n" + heatingMessage));
     }
 
-    public void shutdown() throws InterruptedException {
-        robotServiceManagedChannel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-        storageServiceManagedChannel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-        thermostatServiceManagedChannel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-    }
 }

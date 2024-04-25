@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="208.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ncirl.formcontrollers.Controller">
+<AnchorPane prefHeight="208.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ncirl.formcontrollers.UnaryController">
     <children>
         <Button fx:id="showRobotStatusButton" layoutX="27.0" layoutY="22.0" mnemonicParsing="false" onAction="#showRobotStatusButtonClick" prefHeight="26.0" prefWidth="160.0" text="Show Robot Status" />
         <Button fx:id="showStorageStatusButton" layoutX="237.0" layoutY="22.0" mnemonicParsing="false" onAction="#showStorageStatusButtonClick" prefHeight="26.0" prefWidth="160.0" text="Show Storage Status" />

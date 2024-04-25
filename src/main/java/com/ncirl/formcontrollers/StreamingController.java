@@ -13,18 +13,18 @@ import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class NewSmartWarehouseFormController {
+public class StreamingController {
 
     private final ManagedChannel channel;
-    private final RobotServiceGrpc.RobotServiceStub stub;
+    private final RobotServiceGrpc.RobotServiceStub robotStub;
     private final RobotServiceGrpc.RobotServiceStub bidirectionalStub;
     private final ThermostatServiceGrpc.ThermostatServiceStub thermoStub;
 
-    public NewSmartWarehouseFormController(String host, int port) {
+    public StreamingController(String host, int port) {
         this.channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build();
-        this.stub = RobotServiceGrpc.newStub(channel);
+        this.robotStub = RobotServiceGrpc.newStub(channel);
         this.bidirectionalStub = RobotServiceGrpc.newStub(channel);
         this.thermoStub = ThermostatServiceGrpc.newStub(channel);
     }
@@ -34,7 +34,7 @@ public class NewSmartWarehouseFormController {
     }
 
     public void streamRobotStatus (String robotName) {
-        StreamObserver<StreamRobotStatusRequest> requestObserver = stub.streamRobotStatus(new StreamObserver<>() {
+        StreamObserver<StreamRobotStatusRequest> requestObserver = robotStub.streamRobotStatus(new StreamObserver<>() {
 
             @Override
             public void onNext(StreamRobotStatusResponse response) {
@@ -157,8 +157,8 @@ public class NewSmartWarehouseFormController {
         String robotName = "PX7Y";
         int thermoPort = 50070;
 
-        NewSmartWarehouseFormController robot = new NewSmartWarehouseFormController(host, robotPort);
-        NewSmartWarehouseFormController temperature = new NewSmartWarehouseFormController(host, thermoPort);
+        StreamingController robot = new StreamingController(host, robotPort);
+        StreamingController temperature = new StreamingController(host, thermoPort);
         temperature.streamThermoStatus();
 
 

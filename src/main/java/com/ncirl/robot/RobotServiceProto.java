@@ -57,23 +57,24 @@ public final class RobotServiceProto {
       "oogle/protobuf/empty.proto\"]\n\030UnaryRobot" +
       "StatusResponse\022\021\n\trobotName\030\001 \001(\t\022\023\n\013rob" +
       "otStatus\030\002 \001(\t\022\031\n\021robotBatteryLevel\030\003 \001(" +
-      "\005\"?\n\030StreamRobotStatusRequest\022\021\n\trobotNa" +
-      "me\030\001 \001(\t\022\020\n\010dateTime\030\002 \001(\t\",\n\031StreamRobo" +
-      "tStatusResponse\022\017\n\007message\030\001 \001(\t\"\'\n\024Bidi" +
-      "rectionalRequest\022\017\n\007message\030\001 \001(\t\"(\n\025Bid" +
-      "irectionalResponse\022\017\n\007message\030\001 \001(\t\"\"\n\013R" +
-      "obotStatus\022\023\n\013robotStatus\030\001 \001(\t2\212\003\n\014Robo" +
-      "tService\022Z\n\025getCurrentRobotStatus\022\026.goog" +
-      "le.protobuf.Empty\032).com.ncirl.robot.Unar" +
-      "yRobotStatusResponse\022l\n\021streamRobotStatu" +
-      "s\022).com.ncirl.robot.StreamRobotStatusReq" +
-      "uest\032*.com.ncirl.robot.StreamRobotStatus" +
-      "Response(\001\022h\n\023bidirectionalStream\022%.com." +
-      "ncirl.robot.BidirectionalRequest\032&.com.n" +
-      "cirl.robot.BidirectionalResponse(\0010\001\022F\n\016" +
-      "SetRobotStatus\022\034.com.ncirl.robot.RobotSt" +
-      "atus\032\026.google.protobuf.EmptyB&\n\017com.ncir" +
-      "l.robotB\021RobotServiceProtoP\001b\006proto3"
+      "\005\"[\n\030StreamRobotStatusRequest\022\021\n\trobotNa" +
+      "me\030\001 \001(\t\022\020\n\010dateTime\030\002 \001(\t\022\032\n\022streamBatt" +
+      "eryLevel\030\003 \001(\t\",\n\031StreamRobotStatusRespo" +
+      "nse\022\017\n\007message\030\001 \001(\t\"\'\n\024BidirectionalReq" +
+      "uest\022\017\n\007message\030\001 \001(\t\"(\n\025BidirectionalRe" +
+      "sponse\022\017\n\007message\030\001 \001(\t\"\"\n\013RobotStatus\022\023" +
+      "\n\013robotStatus\030\001 \001(\t2\212\003\n\014RobotService\022Z\n\025" +
+      "getCurrentRobotStatus\022\026.google.protobuf." +
+      "Empty\032).com.ncirl.robot.UnaryRobotStatus" +
+      "Response\022l\n\021streamRobotStatus\022).com.ncir" +
+      "l.robot.StreamRobotStatusRequest\032*.com.n" +
+      "cirl.robot.StreamRobotStatusResponse(\001\022h" +
+      "\n\023bidirectionalStream\022%.com.ncirl.robot." +
+      "BidirectionalRequest\032&.com.ncirl.robot.B" +
+      "idirectionalResponse(\0010\001\022F\n\016SetRobotStat" +
+      "us\022\034.com.ncirl.robot.RobotStatus\032\026.googl" +
+      "e.protobuf.EmptyB&\n\017com.ncirl.robotB\021Rob" +
+      "otServiceProtoP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -99,7 +100,7 @@ public final class RobotServiceProto {
     internal_static_com_ncirl_robot_StreamRobotStatusRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_ncirl_robot_StreamRobotStatusRequest_descriptor,
-        new java.lang.String[] { "RobotName", "DateTime", });
+        new java.lang.String[] { "RobotName", "DateTime", "StreamBatteryLevel", });
     internal_static_com_ncirl_robot_StreamRobotStatusResponse_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_com_ncirl_robot_StreamRobotStatusResponse_fieldAccessorTable = new

@@ -26,4 +26,14 @@ public interface StreamRobotStatusRequestOrBuilder extends
    */
   com.google.protobuf.ByteString
       getDateTimeBytes();
+
+  /**
+   * <code>string streamBatteryLevel = 3;</code>
+   */
+  java.lang.String getStreamBatteryLevel();
+  /**
+   * <code>string streamBatteryLevel = 3;</code>
+   */
+  com.google.protobuf.ByteString
+      getStreamBatteryLevelBytes();
 }

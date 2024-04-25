@@ -30,6 +30,7 @@ message UnaryRobotStatusResponse {
 message StreamRobotStatusRequest {
   string robotName = 1;
   string dateTime = 2;
+  string streamBatteryLevel = 3;
 }
 
 message StreamRobotStatusResponse {

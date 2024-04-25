@@ -18,6 +18,7 @@ private static final long serialVersionUID = 0L;
   private StreamRobotStatusRequest() {
     robotName_ = "";
     dateTime_ = "";
+    streamBatteryLevel_ = "";
   }
 
   @java.lang.Override
@@ -54,6 +55,12 @@ private static final long serialVersionUID = 0L;
             java.lang.String s = input.readStringRequireUtf8();
 
             dateTime_ = s;
+            break;
+          }
+          case 26: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            streamBatteryLevel_ = s;
             break;
           }
           default: {
@@ -156,6 +163,40 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int STREAMBATTERYLEVEL_FIELD_NUMBER = 3;
+  private volatile java.lang.Object streamBatteryLevel_;
+  /**
+   * <code>string streamBatteryLevel = 3;</code>
+   */
+  public java.lang.String getStreamBatteryLevel() {
+    java.lang.Object ref = streamBatteryLevel_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      streamBatteryLevel_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string streamBatteryLevel = 3;</code>
+   */
+  public com.google.protobuf.ByteString
+      getStreamBatteryLevelBytes() {
+    java.lang.Object ref = streamBatteryLevel_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      streamBatteryLevel_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -176,6 +217,9 @@ private static final long serialVersionUID = 0L;
     if (!getDateTimeBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, dateTime_);
     }
+    if (!getStreamBatteryLevelBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, streamBatteryLevel_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -190,6 +234,9 @@ private static final long serialVersionUID = 0L;
     }
     if (!getDateTimeBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, dateTime_);
+    }
+    if (!getStreamBatteryLevelBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, streamBatteryLevel_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -211,6 +258,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getRobotName());
     result = result && getDateTime()
         .equals(other.getDateTime());
+    result = result && getStreamBatteryLevel()
+        .equals(other.getStreamBatteryLevel());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -226,6 +275,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getRobotName().hashCode();
     hash = (37 * hash) + DATETIME_FIELD_NUMBER;
     hash = (53 * hash) + getDateTime().hashCode();
+    hash = (37 * hash) + STREAMBATTERYLEVEL_FIELD_NUMBER;
+    hash = (53 * hash) + getStreamBatteryLevel().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -363,6 +414,8 @@ private static final long serialVersionUID = 0L;
 
       dateTime_ = "";
 
+      streamBatteryLevel_ = "";
+
       return this;
     }
 
@@ -391,6 +444,7 @@ private static final long serialVersionUID = 0L;
       com.ncirl.robot.StreamRobotStatusRequest result = new com.ncirl.robot.StreamRobotStatusRequest(this);
       result.robotName_ = robotName_;
       result.dateTime_ = dateTime_;
+      result.streamBatteryLevel_ = streamBatteryLevel_;
       onBuilt();
       return result;
     }
@@ -445,6 +499,10 @@ private static final long serialVersionUID = 0L;
       }
       if (!other.getDateTime().isEmpty()) {
         dateTime_ = other.dateTime_;
+        onChanged();
+      }
+      if (!other.getStreamBatteryLevel().isEmpty()) {
+        streamBatteryLevel_ = other.streamBatteryLevel_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -610,6 +668,75 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
       
       dateTime_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object streamBatteryLevel_ = "";
+    /**
+     * <code>string streamBatteryLevel = 3;</code>
+     */
+    public java.lang.String getStreamBatteryLevel() {
+      java.lang.Object ref = streamBatteryLevel_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        streamBatteryLevel_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string streamBatteryLevel = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getStreamBatteryLevelBytes() {
+      java.lang.Object ref = streamBatteryLevel_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        streamBatteryLevel_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string streamBatteryLevel = 3;</code>
+     */
+    public Builder setStreamBatteryLevel(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      streamBatteryLevel_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string streamBatteryLevel = 3;</code>
+     */
+    public Builder clearStreamBatteryLevel() {
+      
+      streamBatteryLevel_ = getDefaultInstance().getStreamBatteryLevel();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string streamBatteryLevel = 3;</code>
+     */
+    public Builder setStreamBatteryLevelBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      streamBatteryLevel_ = value;
       onChanged();
       return this;
     }

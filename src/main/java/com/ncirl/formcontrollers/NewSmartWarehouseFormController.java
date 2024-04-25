@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Label;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -30,8 +31,8 @@ public class NewSmartWarehouseFormController {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    public void streamRobotStatus (String robotName){
-        StreamObserver<StreamRobotStatusRequest> requestObserver = stub.streamRobotStatus(new StreamObserver<>(){
+    public void streamRobotStatus (String robotName) {
+        StreamObserver<StreamRobotStatusRequest> requestObserver = stub.streamRobotStatus(new StreamObserver<>() {
 
             @Override
             public void onNext(StreamRobotStatusResponse response) {
@@ -49,24 +50,34 @@ public class NewSmartWarehouseFormController {
             }
         });
 
+
         try {
+            int currentBatteryLevel = 110;
+            boolean resetBatteryLevel = false;
+
             while (true) {
-                String dateTime = LocalDateTime.now().toString();
+                if (currentBatteryLevel == 10) {
+                    resetBatteryLevel = true;
+                }
+
+                currentBatteryLevel = resetBatteryLevel ? 100 : Math.max(0, currentBatteryLevel - 10);
+
+                String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
                 StreamRobotStatusRequest streamRobotRequest = StreamRobotStatusRequest.newBuilder()
                         .setRobotName(robotName)
                         .setDateTime(dateTime)
+                        .setStreamBatteryLevel(String.valueOf(currentBatteryLevel)) // Use the updated value
                         .build();
                 requestObserver.onNext(streamRobotRequest);
                 Thread.sleep(5000); // Send information every 5 seconds
+                resetBatteryLevel = false; // Reset the flag after each update
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
         requestObserver.onCompleted();
-
     }
-
     public void bidirectionalStreaming() {
         // Create a CountDownLatch to synchronize the sending of the second request
         CountDownLatch latch = new CountDownLatch(1);

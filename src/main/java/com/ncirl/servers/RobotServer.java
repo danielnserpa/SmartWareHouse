@@ -181,6 +181,7 @@ public class RobotServer {
                     System.out.println("Received Robot information:");
                     System.out.println("Active Robot name: " + streamRobotRequest.getRobotName());
                     System.out.println("Date and Time: " + streamRobotRequest.getDateTime());
+                    System.out.println("Battery Level: " + streamRobotRequest.getStreamBatteryLevel() );
                     System.out.println("\n");
                 }
                 @Override

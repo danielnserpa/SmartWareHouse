@@ -4,6 +4,8 @@ import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.agent.model.NewService;
 import com.google.protobuf.Empty;
 import com.ncirl.common.Thermostat;
+import com.ncirl.thermostat.StreamThermoStatusRequest;
+import com.ncirl.thermostat.StreamThermoStatusResponse;
 import com.ncirl.thermostat.ThermostatServiceGrpc;
 import com.ncirl.thermostat.UnaryThermostatStatusResponse;
 import io.grpc.Server;
@@ -99,7 +101,7 @@ public class ThermostatServer {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        ThermostatServer server = new ThermostatServer();
+        final ThermostatServer server = new ThermostatServer();
         server.start();
         server.blockUntilShutdown();
     }
@@ -139,5 +141,47 @@ public class ThermostatServer {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }
+
+
+        @Override
+        public void streamThermoStatus(StreamThermoStatusRequest request, StreamObserver<StreamThermoStatusResponse> responseObserver) {
+
+            final Random random = new Random();
+
+            Runnable streamingTask = () -> {
+                try {
+                    while (!Thread.currentThread().isInterrupted()) {
+                        int temperature = random.nextInt(30 - 15 + 1) + 15;  // Adjust as needed (15 to 29 for exclusive)
+                        String message = "Current temperature at " + temperature + "ºC";
+
+                        // Heater control logic
+                        if (temperature < 18) {
+                            message += " Sending request to turn on heater.";
+                            // Implement logic to send heater ON request (replace with your actual implementation)
+                            // This could involve calling another gRPC service or sending a message to a different system
+                        } else if (temperature > 25) {
+                            message += " Sending request to turn off heater.";
+                            // Implement logic to send heater OFF request (replace with your placeholder)
+                        }
+
+                        StreamThermoStatusResponse response = StreamThermoStatusResponse.newBuilder()
+                                .setMessage(message)
+                                .build();
+                        responseObserver.onNext(response);
+                        Thread.sleep(5000); // Stream every 5 seconds
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    responseObserver.onCompleted();
+                }
+            };
+            Thread streamingThread = new Thread(streamingTask);
+            streamingThread.start();
+        }
     }
+
+
 }
+
+

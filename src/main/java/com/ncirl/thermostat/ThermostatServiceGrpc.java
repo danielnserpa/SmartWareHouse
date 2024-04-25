@@ -46,6 +46,37 @@ public final class ThermostatServiceGrpc {
     return getGetCurrentThermostatStatusMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.ncirl.thermostat.StreamThermoStatusRequest,
+      com.ncirl.thermostat.StreamThermoStatusResponse> getStreamThermoStatusMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "streamThermoStatus",
+      requestType = com.ncirl.thermostat.StreamThermoStatusRequest.class,
+      responseType = com.ncirl.thermostat.StreamThermoStatusResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+  public static io.grpc.MethodDescriptor<com.ncirl.thermostat.StreamThermoStatusRequest,
+      com.ncirl.thermostat.StreamThermoStatusResponse> getStreamThermoStatusMethod() {
+    io.grpc.MethodDescriptor<com.ncirl.thermostat.StreamThermoStatusRequest, com.ncirl.thermostat.StreamThermoStatusResponse> getStreamThermoStatusMethod;
+    if ((getStreamThermoStatusMethod = ThermostatServiceGrpc.getStreamThermoStatusMethod) == null) {
+      synchronized (ThermostatServiceGrpc.class) {
+        if ((getStreamThermoStatusMethod = ThermostatServiceGrpc.getStreamThermoStatusMethod) == null) {
+          ThermostatServiceGrpc.getStreamThermoStatusMethod = getStreamThermoStatusMethod =
+              io.grpc.MethodDescriptor.<com.ncirl.thermostat.StreamThermoStatusRequest, com.ncirl.thermostat.StreamThermoStatusResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "streamThermoStatus"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.ncirl.thermostat.StreamThermoStatusRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.ncirl.thermostat.StreamThermoStatusResponse.getDefaultInstance()))
+              .setSchemaDescriptor(new ThermostatServiceMethodDescriptorSupplier("streamThermoStatus"))
+              .build();
+        }
+      }
+    }
+    return getStreamThermoStatusMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -100,6 +131,13 @@ public final class ThermostatServiceGrpc {
         io.grpc.stub.StreamObserver<com.ncirl.thermostat.UnaryThermostatStatusResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetCurrentThermostatStatusMethod(), responseObserver);
     }
+
+    /**
+     */
+    default void streamThermoStatus(com.ncirl.thermostat.StreamThermoStatusRequest request,
+        io.grpc.stub.StreamObserver<com.ncirl.thermostat.StreamThermoStatusResponse> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getStreamThermoStatusMethod(), responseObserver);
+    }
   }
 
   /**
@@ -136,6 +174,14 @@ public final class ThermostatServiceGrpc {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetCurrentThermostatStatusMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void streamThermoStatus(com.ncirl.thermostat.StreamThermoStatusRequest request,
+        io.grpc.stub.StreamObserver<com.ncirl.thermostat.StreamThermoStatusResponse> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
+          getChannel().newCall(getStreamThermoStatusMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -159,6 +205,14 @@ public final class ThermostatServiceGrpc {
     public com.ncirl.thermostat.UnaryThermostatStatusResponse getCurrentThermostatStatus(com.google.protobuf.Empty request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetCurrentThermostatStatusMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public java.util.Iterator<com.ncirl.thermostat.StreamThermoStatusResponse> streamThermoStatus(
+        com.ncirl.thermostat.StreamThermoStatusRequest request) {
+      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
+          getChannel(), getStreamThermoStatusMethod(), getCallOptions(), request);
     }
   }
 
@@ -188,6 +242,7 @@ public final class ThermostatServiceGrpc {
   }
 
   private static final int METHODID_GET_CURRENT_THERMOSTAT_STATUS = 0;
+  private static final int METHODID_STREAM_THERMO_STATUS = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -209,6 +264,10 @@ public final class ThermostatServiceGrpc {
         case METHODID_GET_CURRENT_THERMOSTAT_STATUS:
           serviceImpl.getCurrentThermostatStatus((com.google.protobuf.Empty) request,
               (io.grpc.stub.StreamObserver<com.ncirl.thermostat.UnaryThermostatStatusResponse>) responseObserver);
+          break;
+        case METHODID_STREAM_THERMO_STATUS:
+          serviceImpl.streamThermoStatus((com.ncirl.thermostat.StreamThermoStatusRequest) request,
+              (io.grpc.stub.StreamObserver<com.ncirl.thermostat.StreamThermoStatusResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -235,6 +294,13 @@ public final class ThermostatServiceGrpc {
               com.google.protobuf.Empty,
               com.ncirl.thermostat.UnaryThermostatStatusResponse>(
                 service, METHODID_GET_CURRENT_THERMOSTAT_STATUS)))
+        .addMethod(
+          getStreamThermoStatusMethod(),
+          io.grpc.stub.ServerCalls.asyncServerStreamingCall(
+            new MethodHandlers<
+              com.ncirl.thermostat.StreamThermoStatusRequest,
+              com.ncirl.thermostat.StreamThermoStatusResponse>(
+                service, METHODID_STREAM_THERMO_STATUS)))
         .build();
   }
 
@@ -284,6 +350,7 @@ public final class ThermostatServiceGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new ThermostatServiceFileDescriptorSupplier())
               .addMethod(getGetCurrentThermostatStatusMethod())
+              .addMethod(getStreamThermoStatusMethod())
               .build();
         }
       }

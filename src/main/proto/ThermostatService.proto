@@ -12,6 +12,8 @@ service ThermostatService {
 
   rpc getCurrentThermostatStatus (google.protobuf.Empty) returns (UnaryThermostatStatusResponse);
 
+  rpc streamThermoStatus(StreamThermoStatusRequest) returns (stream StreamThermoStatusResponse);
+
 }
 
 message UnaryThermostatStatusResponse {
@@ -19,4 +21,13 @@ message UnaryThermostatStatusResponse {
   // Dados que serao passados para o cliente, apos o request. Sao as informacoes do storage.
   int32 temp = 1;
   string heaterStatusMessage = 2;
+}
+
+message StreamThermoStatusRequest {
+int32 streamTemp = 3;
+
+}
+
+message StreamThermoStatusResponse {
+string message = 4;
 }

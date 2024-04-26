@@ -37,4 +37,4 @@ public class Robot {
         this.batteryLevel = batteryLevel;
     }
 }
-// FAZER GETTERS AND SETTERS PARA TODOS
+

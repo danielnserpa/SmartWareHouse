@@ -79,13 +79,3 @@ This launches the JavaFX GUI where you can interact with the system.
 ## Conclusion
 
 This project demonstrates the power of **distributed systems** in creating dynamic, interactive applications. By using **Docker** for containerization, **gRPC** for communication, and **JavaFX** for the user interface, it provides a functional and scalable architecture ideal for simulating smart warehouse systems.
-
-Enjoy interacting with your **Smart Warehouse**!
-
-
-
-src > main > java > formcontrollers > servers
-start each Server > start Launcher > start StreamingController
-
-
-
